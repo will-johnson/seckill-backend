@@ -2,34 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c529ca6-3b87-4d70-977a-52a84a30a7ce" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/util/Logg.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/controller/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/controller/SecKillController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/controller/SecKillController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/controller/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/controller/TestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/dao/GoodsDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/dao/GoodsDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/dao/OrderDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/dao/OrderDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/dao/UserDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/rabbitmq/MQReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/rabbitmq/MQReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/rabbitmq/MQSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/rabbitmq/MQSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/redis/RedisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/redis/RedisService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/redis/key/BaseKeyPrefix.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/redis/key/BaseKeyPrefix.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/GoodsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/GoodsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/controller/LoginController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/controller/SecKillController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/controller/SecKillController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/controller/TestController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/controller/TestController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/dao/GoodsDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/dao/GoodsDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/dao/OrderDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/dao/OrderDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/dao/UserDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/rabbitmq/MQReceiver.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/rabbitmq/MQReceiver.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/rabbitmq/MQSender.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/rabbitmq/MQSender.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/service/GoodsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/service/GoodsService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/service/OrderService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/service/OrderService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/seen/seckillbackend/service/UserService.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,15 +38,24 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/OrderService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="158">
-              <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
+            <state relative-caret-position="463">
+              <caret line="70" column="25" lean-forward="true" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="25" />
               <folding>
                 <element signature="e#2109#2110#0" expanded="true" />
                 <element signature="e#2126#2127#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="6" lean-forward="true" selection-start-column="6" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -138,6 +121,7 @@
         <option value="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/UserService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/controller/SecKillController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/OrderService.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -167,110 +151,6 @@
             <path>
               <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
               <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="seckillbackend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="seckillbackend" type="462c0819:PsiDirectoryNode" />
-              <item name="controller" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="seckillbackend" type="462c0819:PsiDirectoryNode" />
-              <item name="dao" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="seckillbackend" type="462c0819:PsiDirectoryNode" />
-              <item name="domain" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="seckillbackend" type="462c0819:PsiDirectoryNode" />
-              <item name="rabbitmq" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="seckillbackend" type="462c0819:PsiDirectoryNode" />
-              <item name="redis" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="seckillbackend" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="seckillbackend" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seckill-backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seckill-backend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -327,12 +207,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1556957423457</updated>
-      <workItem from="1556957427968" duration="17093000" />
+      <workItem from="1556957427968" duration="17629000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17093000" />
+    <option name="totallyTimeSpent" value="17629000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -351,10 +231,10 @@
       <window_info id="UI Designer" />
       <window_info id="Favorites" sideWeight="0.7763158" side_tool="true" weight="0.24964234" />
       <window_info id="Web" sideWeight="0.7763158" side_tool="true" weight="0.24964234" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.22196797" visible="true" weight="0.24964234" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.22196797" visible="true" weight="0.24964234" />
       <window_info id="Structure" order="1" sideWeight="0.77803206" side_tool="true" weight="0.24964234" />
       <window_info anchor="bottom" id="Spring" />
-      <window_info anchor="bottom" id="Terminal" weight="0.32891566" />
+      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.22289157" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Statistic" weight="0.32891566" />
@@ -364,7 +244,7 @@
       <window_info anchor="bottom" id="Messages" weight="0.32891566" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27349398" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.53614455" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.47710842" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -728,12 +608,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/seen/seckillbackend/service/OrderService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
+        <state relative-caret-position="463">
+          <caret line="70" column="25" lean-forward="true" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="25" />
           <folding>
             <element signature="e#2109#2110#0" expanded="true" />
             <element signature="e#2126#2127#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="6" lean-forward="true" selection-start-column="6" selection-end-column="6" />
         </state>
       </provider>
     </entry>
