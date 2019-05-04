@@ -8,7 +8,7 @@ public abstract class BaseKeyPrefix implements KeyPrefix {
         this(0, prefix);
     }
 
-    public BaseKeyPrefix( int expireSeconds, String prefix) {
+    public BaseKeyPrefix(int expireSeconds, String prefix) {
         this.expireSeconds = expireSeconds;
         this.prefix = prefix;
     }

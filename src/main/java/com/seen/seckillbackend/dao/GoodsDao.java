@@ -18,9 +18,12 @@ public interface GoodsDao {
     Goods getGoodById(long id);
 
     //  防止卖超
-    @Update("update goods set stock = stock -1 where id = #{id} and stock >0")
+    @Update("update goods set stock = stock - 1 where id = #{id} and stock >0")
     boolean reduceStockById(long id);
 
     @Select("select stock from goods where id = #{id}")
     Long getGoodsStockById(long id);
+
+    @Update("update goods set stock = 10")
+    void reset();
 }

@@ -1,5 +1,6 @@
 package com.seen.seckillbackend.controller;
 
+import com.seen.seckillbackend.dao.UserDao;
 import com.seen.seckillbackend.domain.Goods;
 import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.rabbitmq.MQSender;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class TestController {
 
@@ -24,6 +27,9 @@ public class TestController {
 
     @Autowired
     MQSender sender;
+
+    @Autowired
+    UserDao userDao;
 
     @RequestMapping("/get")
     @ResponseBody
@@ -55,15 +61,12 @@ public class TestController {
         return Result.success("");
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.POST)
+
+
+    @GetMapping("/token")
     @ResponseBody
-    public void test(User user) {
-        Goods goods = new Goods();
-        goods.setId(1L);
-        String string = StringBean.beanToString(new SeckillMessage(user, goods));
-        System.out.println(string);
-        SeckillMessage seckillMessage = StringBean.stringToBean(string, SeckillMessage.class);
-        System.out.println(seckillMessage + "       success");
+    public void genetoken() {
+        List<User> allUser = userDao.getAllUser();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.seen.seckillbackend.rabbitmq;
 
+import com.seen.seckillbackend.util.Logg;
 import com.seen.seckillbackend.util.StringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +15,9 @@ public class MQSender {
     @Autowired
     AmqpTemplate amqpTemplate;
 
-    Logger logger = LoggerFactory.getLogger(MQReceiver.class);
-
-
     public void send(Object obj) {
         String message = StringBean.beanToString(obj);
-
-        logger.info("send message: " + message);
+        Logg.logger.info("send message: " + message);
         amqpTemplate.convertAndSend(MQConfig.QUEUE_NAME, message);
     }
 }

@@ -22,10 +22,15 @@ public class GoodsService {
     }
 
     public boolean reduceStockById(long id) {
-        return goodsDao.reduceStockById(id);
+        boolean b = goodsDao.reduceStockById(id);
+        return b;
     }
 
     public Long getGoodsStockById(long id) {
         return goodsDao.getGoodsStockById(id);
+    }
+
+    public void reset() {
+        goodsDao.reset();
     }
 }

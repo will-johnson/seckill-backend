@@ -24,7 +24,7 @@ public class RedisService {
      */
 
     /**
-     * 获取当个对象
+     * 获取单个对象
      * */
     public <T> T get(KeyPrefix prefix, String key, Class<T> clazz) {
         Jedis jedis = null;
@@ -173,6 +173,19 @@ public class RedisService {
                 jedis.close();
             }
         }
+    }
+
+    public boolean deleteAll() {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.flushDB();
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return true;
     }
 
 

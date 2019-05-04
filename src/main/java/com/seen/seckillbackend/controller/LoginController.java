@@ -6,6 +6,7 @@ import com.seen.seckillbackend.util.Result;
 import com.seen.seckillbackend.vo.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,4 +25,13 @@ public class LoginController {
         String token = userService.login(response,user);
         return Result.success(token);
     }
+
+
+    @GetMapping("/login_all")
+    @ResponseBody
+    public Result<Integer> login() {
+        userService.loginAll();
+        return Result.success(0);
+    }
+
 }

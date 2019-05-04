@@ -6,6 +6,7 @@ import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.redis.RedisService;
 import com.seen.seckillbackend.redis.key.OrderKeyPrefix;
 import com.seen.seckillbackend.service.OrderService;
+import com.seen.seckillbackend.util.Logg;
 import com.seen.seckillbackend.util.StringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MQReceiver {
 
-    Logger logger = LoggerFactory.getLogger(MQReceiver.class);
+
 
     @Autowired
     RedisService redisService;
@@ -26,7 +27,7 @@ public class MQReceiver {
 
     @RabbitListener(queues = MQConfig.QUEUE_NAME)
     public void receive(String message) {
-        logger.info("receive message: " + message);
+        Logg.logger.info("receive message: " + message);
         SeckillMessage seckillMessage = StringBean.stringToBean(message, SeckillMessage.class);
         Goods goods = seckillMessage.getGoods();
         User user = seckillMessage.getUser();
