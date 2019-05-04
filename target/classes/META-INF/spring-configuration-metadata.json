@@ -1,0 +1,52 @@
+{
+  "groups": [
+    {
+      "name": "redis",
+      "type": "com.seen.seckillbackend.redis.RedisConfig",
+      "sourceType": "com.seen.seckillbackend.redis.RedisConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "redis.host",
+      "type": "java.lang.String",
+      "sourceType": "com.seen.seckillbackend.redis.RedisConfig"
+    },
+    {
+      "name": "redis.password",
+      "type": "java.lang.String",
+      "sourceType": "com.seen.seckillbackend.redis.RedisConfig"
+    },
+    {
+      "name": "redis.pool-max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.redis.RedisConfig",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis.pool-max-total",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.redis.RedisConfig",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis.pool-max-wait",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.redis.RedisConfig",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.redis.RedisConfig",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis.timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.redis.RedisConfig",
+      "defaultValue": 0
+    }
+  ],
+  "hints": []
+}
