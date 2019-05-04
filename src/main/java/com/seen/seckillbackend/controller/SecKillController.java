@@ -11,14 +11,20 @@ import com.seen.seckillbackend.redis.key.OrderKeyPrefix;
 import com.seen.seckillbackend.service.GoodsService;
 import com.seen.seckillbackend.util.CodeMsg;
 import com.seen.seckillbackend.util.Result;
+import com.seen.seckillbackend.util.StringBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.List;
 
+@Controller
 public class SecKillController  implements InitializingBean {
 
     @Autowired
@@ -49,16 +55,17 @@ public class SecKillController  implements InitializingBean {
             return;
         }
         for (Goods goods : goodsList) {
-            redisService.set(GoodsKeyPrefix.goodsStockPrefix, "" + goods.getId(), goods.getStock());
+            redisService.set(GoodsKeyPrefix.goodsStockPrefix, "" + goods.getId(), goodsService.getGoodsStockById(goods.getId()));
             localOverMap.put(goods.getId(), false);
         }
     }
 
     /**
      * 高并发访问接口
-     * 秒杀接口地址隐藏
+     * 秒杀接口地址隐藏 TODO
      */
     @GetMapping("/seckill/{goodsId}")
+    @ResponseBody
     public Result<Integer> seckill(User user, @PathVariable long goodsId) {
         if(user == null) {
             return Result.err(CodeMsg.USER_NOT_EXIST);

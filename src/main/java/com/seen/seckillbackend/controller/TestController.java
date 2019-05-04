@@ -1,11 +1,14 @@
 package com.seen.seckillbackend.controller;
 
+import com.seen.seckillbackend.domain.Goods;
 import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.rabbitmq.MQSender;
+import com.seen.seckillbackend.rabbitmq.SeckillMessage;
 import com.seen.seckillbackend.redis.RedisService;
 import com.seen.seckillbackend.redis.key.UserKeyPrefix;
 import com.seen.seckillbackend.service.UserService;
 import com.seen.seckillbackend.util.Result;
+import com.seen.seckillbackend.util.StringBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -52,9 +55,15 @@ public class TestController {
         return Result.success("");
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
     @ResponseBody
-    public void miaosha(User user) {
-        System.out.println(user);
+    public void test(User user) {
+        Goods goods = new Goods();
+        goods.setId(1L);
+        String string = StringBean.beanToString(new SeckillMessage(user, goods));
+        System.out.println(string);
+        SeckillMessage seckillMessage = StringBean.stringToBean(string, SeckillMessage.class);
+        System.out.println(seckillMessage + "       success");
     }
+
 }

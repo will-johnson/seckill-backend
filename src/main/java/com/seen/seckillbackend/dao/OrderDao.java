@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface OrderDao {
-    @Insert("insert into order (user_id, goods_id) values (#{userId}, #{goodsId})")
+    @Insert("insert into sec_order (user_id, goods_id) values (#{userId}, #{goodsId})")
     long insert(SeckillOrder order);
 
-    @Select("select * from order_info where id = #{orderId}")
+    @Select("select * from sec_order where id = #{orderId}")
     SeckillOrder getOrderById(@Param("orderId")long orderId);
 }

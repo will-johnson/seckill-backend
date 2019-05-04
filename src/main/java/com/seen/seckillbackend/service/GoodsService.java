@@ -24,4 +24,8 @@ public class GoodsService {
     public boolean reduceStockById(long id) {
         return goodsDao.reduceStockById(id);
     }
+
+    public Long getGoodsStockById(long id) {
+        return goodsDao.getGoodsStockById(id);
+    }
 }

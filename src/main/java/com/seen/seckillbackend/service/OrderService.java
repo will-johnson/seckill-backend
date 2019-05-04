@@ -19,6 +19,9 @@ public class OrderService {
     @Autowired
     RedisService redisService;
 
+    @Autowired
+    GoodsService goodsService;
+
 
     public SeckillOrder getSeckillOrderByGU(long userId, long goodsId) {
         return redisService.get(OrderKeyPrefix.orderKeyPrefix, userId + "_" + goodsId, SeckillOrder.class);
@@ -40,4 +43,16 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
+    public SeckillOrder seckill(User user, Goods goods) {
+        boolean success = goodsService.reduceStockById(goods.getId());
+        if (success) {
+            return this.createOrder(user, goods);
+        }else {
+            //秒杀结束 TODO
+            return null;
+        }
+
+
+    }
 }
