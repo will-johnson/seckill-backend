@@ -14,6 +14,7 @@ public class CodeMsg {
 
     public static final CodeMsg SECKILL_OVER = new CodeMsg(500200, "Seckill is over");
 
+    public static  CodeMsg ACCESS_LIMIT_REACHED =  new CodeMsg(500300, "request is too frequent");
 
     private CodeMsg( int code,String msg ) {
         this.code = code;

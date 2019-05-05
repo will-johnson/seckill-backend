@@ -1,5 +1,6 @@
 package com.seen.seckillbackend.controller;
 
+import com.seen.seckillbackend.access.AccessLimit;
 import com.seen.seckillbackend.domain.Goods;
 import com.seen.seckillbackend.domain.SeckillOrder;
 import com.seen.seckillbackend.domain.User;
@@ -14,22 +15,18 @@ import com.seen.seckillbackend.service.UserService;
 import com.seen.seckillbackend.util.CodeMsg;
 import com.seen.seckillbackend.util.Logg;
 import com.seen.seckillbackend.util.Result;
-import com.seen.seckillbackend.util.StringBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 
 @Controller
-public class SecKillController  implements InitializingBean {
+public class SecKillController implements InitializingBean {
 
     @Autowired
     GoodsService goodsService;
@@ -47,17 +44,17 @@ public class SecKillController  implements InitializingBean {
     UserService userService;
 
 
-
     /**
      * 内存标记
      * key : goodsId
      * value : isOver
      */
-    private HashMap<Long, Boolean> localOverMap =  new HashMap<Long, Boolean>();
+    private HashMap<Long, Boolean> localOverMap = new HashMap<Long, Boolean>();
 
     /**
      * 系统初始化
      * 加载进redis
+     *
      * @throws Exception
      */
     @Override
@@ -77,10 +74,11 @@ public class SecKillController  implements InitializingBean {
      * 高并发访问接口
      * 秒杀接口地址隐藏 TODO
      */
+    @AccessLimit(seconds = 1, maxCount = 1)
     @GetMapping("/seckill/{goodsId}")
     @ResponseBody
     public Result<Integer> seckill(User user, @PathVariable long goodsId) {
-        if(user == null) {
+        if (user == null) {
             Logg.logger.info("用户未登录");
             return Result.err(CodeMsg.USER_NOT_EXIST);
         }
@@ -102,7 +100,7 @@ public class SecKillController  implements InitializingBean {
         if (null != seckillOrder) {
             Logg.logger.info("错误：已经购买过了");
             return null;
-        }else {
+        } else {
             // 预减库存
             Long decr = redisService.decr(GoodsKeyPrefix.goodsStockPrefix, "" + goodsId);
             if (decr < 0) {
@@ -119,8 +117,7 @@ public class SecKillController  implements InitializingBean {
     }
 
 
-
-    public Result<String> getSeckillPath(){
+    public Result<String> getSeckillPath() {
         return null;
     }
 }
