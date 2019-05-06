@@ -63,6 +63,7 @@ public class OrderService {
             return this.createOrder(user, goods);
         }else {
             //秒杀结束 TODO
+            Logg.logger.info("减库存失败");
             return null;
         }
     }

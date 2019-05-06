@@ -74,7 +74,7 @@ public class SecKillController implements InitializingBean {
      * 高并发访问接口
      * 秒杀接口地址隐藏 TODO
      */
-    @AccessLimit(seconds = 1, maxCount = 1)
+    @AccessLimit(seconds = 5, maxCount = 5)
     @GetMapping("/seckill/{goodsId}")
     @ResponseBody
     public Result<Integer> seckill(User user, @PathVariable long goodsId) {
@@ -82,6 +82,7 @@ public class SecKillController implements InitializingBean {
             Logg.logger.info("用户未登录");
             return Result.err(CodeMsg.USER_NOT_EXIST);
         }
+
         // 1.内存标记，减少redis访问
         Boolean isOver = localOverMap.get(goodsId);
         if (isOver) {
@@ -95,6 +96,9 @@ public class SecKillController implements InitializingBean {
          * 只允许一个用户秒杀
          *
          * TODO 考虑限流防刷，同一时间同一用户只能有一个请求
+         *
+         * 先判断是否已经秒杀过了
+         * 没有放行，预减库存
          */
         SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, user.getUsername() + "_" + goodsId, SeckillOrder.class);
         if (null != seckillOrder) {

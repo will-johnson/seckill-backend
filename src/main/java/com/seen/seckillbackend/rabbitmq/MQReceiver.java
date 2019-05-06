@@ -32,6 +32,7 @@ public class MQReceiver {
         Goods goods = seckillMessage.getGoods();
         User user = seckillMessage.getUser();
 
+        // TODO 在这里判断有效吗？
         if (goods.getStock() <= 0) {
             return;
         }
