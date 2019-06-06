@@ -65,7 +65,8 @@ public class SecKillController implements InitializingBean {
             return;
         }
         for (Goods goods : goodsList) {
-            redisService.set(GoodsKeyPrefix.goodsStockPrefix, "" + goods.getId(), goodsService.getGoodsStockById(goods.getId()));
+            long stock = goodsService.getGoodsStockById(goods.getId());
+            redisService.set(GoodsKeyPrefix.goodsStockPrefix, "" + goods.getId(), (int)(stock * 1.5));
             localOverMap.put(goods.getId(), false);
         }
     }
@@ -91,14 +92,9 @@ public class SecKillController implements InitializingBean {
 
         /**
          * 2.预减库存
-         * 存在问题：一个用户的n个请求过来，就会减去n个库存，但是只卖出一个，这样会导致少卖
-         * 3.判断是否已经秒杀到了, 数据库已添加唯一索引
-         * 只允许一个用户秒杀
-         *
-         * TODO 考虑限流防刷，同一时间同一用户只能有一个请求
-         *
-         * 先判断是否已经秒杀过了
-         * 没有放行，预减库存
+         * 2. 先判断是否已经秒杀过了
+         * 3. 预减库存
+         * 4. 入队
          */
         SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, user.getUsername() + "_" + goodsId, SeckillOrder.class);
         if (null != seckillOrder) {
@@ -113,6 +109,7 @@ public class SecKillController implements InitializingBean {
             }
             Logg.logger.info("预减库存成功");
         }
+
         // 4.入队
         SeckillMessage seckillMessage = new SeckillMessage(user, goodsService.getGoodById(goodsId));
         sender.send(seckillMessage);

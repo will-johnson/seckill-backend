@@ -29,10 +29,20 @@ public class OrderService {
         return redisService.get(OrderKeyPrefix.orderKeyPrefix, userId + "_" + goodsId, SeckillOrder.class);
     }
 
-    /**
-     * 保证事务性
-     */
-    @Transactional
+    @Transactional()
+    public SeckillOrder seckill(User user, Goods goods) {
+        boolean success = goodsService.reduceStockById(goods.getId());
+        if (success) {
+            Logg.logger.info("减库存成功");
+            return this.createOrder(user, goods);
+        }else {
+            //秒杀结束 TODO
+            Logg.logger.info("减库存失败");
+            return null;
+        }
+    }
+
+    @Transactional(rollbackFor=Exception.class)
     public SeckillOrder createOrder(User user, Goods goods) {
 
         SeckillOrder order = new SeckillOrder();
@@ -48,25 +58,14 @@ public class OrderService {
             redisService.set(OrderKeyPrefix.orderKeyPrefix, user.getUsername() + "_" + goods.getId(), order);
             Logg.logger.info("数据库成功插入：" + insert);
         } catch (DuplicateKeyException exception) {
+            // 错误了为啥不回滚？
             Logg.logger.warn("错误：重复购买 DuplicateKeyException");
-        } catch (Exception e) {
-            Logg.logger.warn("错误：重复购买 Exception");
+            throw new DuplicateKeyException("重复购买");
         }
         return order;
     }
 
-    @Transactional
-    public SeckillOrder seckill(User user, Goods goods) {
-        boolean success = goodsService.reduceStockById(goods.getId());
-        if (success) {
-            Logg.logger.info("减库存成功");
-            return this.createOrder(user, goods);
-        }else {
-            //秒杀结束 TODO
-            Logg.logger.info("减库存失败");
-            return null;
-        }
-    }
+
 
     public void reset() {
         orderDao.reset();
