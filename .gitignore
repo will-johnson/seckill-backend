@@ -1,2 +1,7 @@
 .idea/
 *.iml
+/.idea/
+target/generated-sources/
+target/generated-test-sources/
+/mvnw
+/seckill-backend.iml
