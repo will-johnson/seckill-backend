@@ -19,8 +19,13 @@ public class RedisService {
     JedisPool jedisPool;
 
 
+
     /**
      * 加入Prefix,防止key被覆盖
+     *
+     * 其他方法：
+     * - setNx
+     * - expire
      */
 
     /**
@@ -41,7 +46,7 @@ public class RedisService {
     }
 
     /**
-     * 设置对象
+     * 设置对象 和 存活时间，更新存活时间
      * */
     public <T> boolean set(KeyPrefix prefix, String key,  T value) {
         Jedis jedis = null;
@@ -187,9 +192,6 @@ public class RedisService {
         }
         return true;
     }
-
-
-
 
     private void returnToPool(Jedis jedis) {
         if(jedis != null) {
