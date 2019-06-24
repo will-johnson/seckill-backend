@@ -2,15 +2,12 @@ package com.seen.seckillbackend.rabbitmq;
 
 import com.seen.seckillbackend.domain.Goods;
 import com.seen.seckillbackend.domain.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class SeckillMessage {
-    private User user;
+    private Long uid;
     private Goods goods;
-
-    public SeckillMessage(User user, Goods goods) {
-        this.user = user;
-        this.goods = goods;
-    }
 }

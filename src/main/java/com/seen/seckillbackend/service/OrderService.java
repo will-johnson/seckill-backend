@@ -6,13 +6,14 @@ import com.seen.seckillbackend.domain.SeckillOrder;
 import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.redis.RedisService;
 import com.seen.seckillbackend.redis.key.OrderKeyPrefix;
-import com.seen.seckillbackend.util.Logg;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class OrderService {
 
     @Autowired
@@ -30,23 +31,23 @@ public class OrderService {
     }
 
     @Transactional()
-    public SeckillOrder seckill(User user, Goods goods) {
+    public SeckillOrder seckill(Long uid, Goods goods) {
         boolean success = goodsService.reduceStockById(goods.getId());
         if (success) {
-            Logg.logger.info("减库存成功");
-            return this.createOrder(user, goods);
+            log.info("减库存成功");
+            return this.createOrder(uid, goods);
         }else {
             //秒杀结束 TODO
-            Logg.logger.info("减库存失败");
+            log.info("减库存失败");
             return null;
         }
     }
 
     @Transactional(rollbackFor=Exception.class)
-    public SeckillOrder createOrder(User user, Goods goods) {
+    public SeckillOrder createOrder(Long uid, Goods goods) {
 
         SeckillOrder order = new SeckillOrder();
-        order.setUserId(user.getUsername());
+        order.setUserId(uid);
         order.setGoodsId(goods.getId());
 
         /**
@@ -55,11 +56,11 @@ public class OrderService {
          */
         try {
             Long insert = orderDao.insert(order);
-            redisService.set(OrderKeyPrefix.orderKeyPrefix, user.getUsername() + "_" + goods.getId(), order);
-            Logg.logger.info("数据库成功插入：" + insert);
+            redisService.set(OrderKeyPrefix.orderKeyPrefix, uid + "_" + goods.getId(), order);
+            log.info("数据库成功插入：" + insert);
         } catch (DuplicateKeyException exception) {
             // 错误了为啥不回滚？
-            Logg.logger.warn("错误：重复购买 DuplicateKeyException");
+            log.warn("错误：重复购买 DuplicateKeyException");
             throw new DuplicateKeyException("重复购买");
         }
         return order;

@@ -6,13 +6,14 @@ import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.redis.RedisService;
 import com.seen.seckillbackend.redis.key.OrderKeyPrefix;
 import com.seen.seckillbackend.service.OrderService;
-import com.seen.seckillbackend.util.Logg;
 import com.seen.seckillbackend.util.StringBean;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class MQReceiver {
 
 
@@ -25,10 +26,10 @@ public class MQReceiver {
 
     @RabbitListener(queues = MQConfig.QUEUE_NAME)
     public void receive(String message) {
-        Logg.logger.info("receive message: " + message);
+        log.info("receive message: " + message);
         SeckillMessage seckillMessage = StringBean.stringToBean(message, SeckillMessage.class);
         Goods goods = seckillMessage.getGoods();
-        User user = seckillMessage.getUser();
+        Long uid = seckillMessage.getUid();
 
         // TODO 在这里判断有效吗？
         if (goods.getStock() <= 0) {
@@ -39,12 +40,12 @@ public class MQReceiver {
          * 判断是否秒杀到了
          * 考虑：一个用户的两次请求都进入了队列的情况
          */
-        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, user.getUsername() + "_" + goods.getId(), SeckillOrder.class);
+        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, uid + "_" + goods.getId(), SeckillOrder.class);
         if (null != seckillOrder) {
             return;
         }
 
         // 减库存，下订单
-        orderService.seckill(user,goods);
+        orderService.seckill(uid,goods);
     }
 }

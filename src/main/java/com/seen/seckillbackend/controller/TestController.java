@@ -31,13 +31,6 @@ public class TestController {
     @Autowired
     UserDao userDao;
 
-    @RequestMapping("/get")
-    @ResponseBody
-    public Result<User> dbGet() {
-        User user = userService.getTest("15850519227");
-        System.out.println(user);
-        return Result.success(user);
-    }
 
     @GetMapping("/redis/{username}")
     @ResponseBody
@@ -50,7 +43,7 @@ public class TestController {
     @ResponseBody
     public Result<Boolean> redisSet(@RequestBody User user) {
         System.out.println(user);
-        Boolean s = redisService.set(UserKeyPrefix.userIdPrefix, user.getUsername()+"", user.getPassword());
+        Boolean s = redisService.set(UserKeyPrefix.userIdPrefix, user.getUid()+"", user.getPassword());
         return Result.success(s);
     }
 

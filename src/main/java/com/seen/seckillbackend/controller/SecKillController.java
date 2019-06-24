@@ -13,8 +13,8 @@ import com.seen.seckillbackend.service.GoodsService;
 import com.seen.seckillbackend.service.OrderService;
 import com.seen.seckillbackend.service.UserService;
 import com.seen.seckillbackend.util.CodeMsg;
-import com.seen.seckillbackend.util.Logg;
 import com.seen.seckillbackend.util.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 
 @Controller
+@Slf4j
 public class SecKillController implements InitializingBean {
 
     @Autowired
@@ -47,19 +49,17 @@ public class SecKillController implements InitializingBean {
     /**
      * 内存标记
      * key : goodsId
-     * value : isOver
+     * value : isOver, true is over.
      */
     private HashMap<Long, Boolean> localOverMap = new HashMap<Long, Boolean>();
 
     /**
      * 系统初始化
      * 加载进redis
-     *
      * @throws Exception
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        userService.loginAll();
         List<Goods> goodsList = goodsService.getGoodsList();
         if (null == goodsList) {
             return;
@@ -73,14 +73,14 @@ public class SecKillController implements InitializingBean {
 
     /**
      * 高并发访问接口
-     * 秒杀接口地址隐藏 TODO
+     * TODO 秒杀接口地址隐藏
      */
     @AccessLimit(seconds = 5, maxCount = 5)
     @GetMapping("/seckill/{goodsId}")
     @ResponseBody
-    public Result<Integer> seckill(User user, @PathVariable long goodsId) {
-        if (user == null) {
-            Logg.logger.info("用户未登录");
+    public Result<Integer> seckill(Long uid, @PathVariable long goodsId) {
+        if (uid == null) {
+            log.info("用户未登录");
             return Result.err(CodeMsg.USER_NOT_EXIST);
         }
 
@@ -96,9 +96,9 @@ public class SecKillController implements InitializingBean {
          * 3. 预减库存
          * 4. 入队
          */
-        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, user.getUsername() + "_" + goodsId, SeckillOrder.class);
+        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, uid + "_" + goodsId, SeckillOrder.class);
         if (null != seckillOrder) {
-            Logg.logger.info("错误：已经购买过了");
+            log.info("错误：已经购买过了");
             return null;
         } else {
             // 预减库存
@@ -107,18 +107,14 @@ public class SecKillController implements InitializingBean {
                 localOverMap.put(goodsId, true);
                 return Result.err(CodeMsg.SECKILL_OVER);
             }
-            Logg.logger.info("预减库存成功");
+            log.info("预减库存成功");
         }
 
         // 4.入队
-        SeckillMessage seckillMessage = new SeckillMessage(user, goodsService.getGoodById(goodsId));
+        SeckillMessage seckillMessage = new SeckillMessage(uid, goodsService.getGoodById(goodsId));
         sender.send(seckillMessage);
-        Logg.logger.info("RabbitMQ 消息发送成功");
+        log.info("RabbitMQ 消息发送成功");
         return Result.success(0); //排队中
     }
 
-
-    public Result<String> getSeckillPath() {
-        return null;
-    }
 }
