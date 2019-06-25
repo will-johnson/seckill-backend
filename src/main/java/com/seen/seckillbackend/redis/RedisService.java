@@ -18,8 +18,6 @@ public class RedisService {
     @Autowired
     JedisPool jedisPool;
 
-
-
     /**
      * 加入Prefix,防止key被覆盖
      *

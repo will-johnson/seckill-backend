@@ -50,10 +50,6 @@ public class OrderService {
         order.setUserId(uid);
         order.setGoodsId(goods.getId());
 
-        /**
-         * bug: 出现重复购买catch错误无效，这会导致商品卖完了，但是数据库插入条目少于商品数目
-         * 因为前面没有做限流处理，导致一瞬间一个用户进入多个请求
-         */
         try {
             Long insert = orderDao.insert(order);
             redisService.set(OrderKeyPrefix.orderKeyPrefix, uid + "_" + goods.getId(), order);

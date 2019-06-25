@@ -64,33 +64,14 @@ public class UserService {
         //延长有效期
         if (exists) {
             addCookie(response, token);
+            String[] split = AesCryption.decrypt(token).split(",");
+            if (split[1].equals(TOKEN_SALT)) {
+                return Long.valueOf(split[0]);
+            }
         }
 
-        Long uid = Long.valueOf(AesCryption.decrypt(token).split(",")[0]);
-        return uid;
+        return null;
     }
-
-    /**
-     * 获取用户并判断存在性
-     * 查缓存
-     * 查数据库
-     */
-    public User getByName(String username) {
-        // 查缓存
-        User user;
-        user = redisService.get(UserKeyPrefix.userIdPrefix, username, User.class);
-        if (null != user) {
-            return user;
-        }
-        // 查数据库
-        user = userDao.getByName(username);
-        redisService.set(UserKeyPrefix.userIdPrefix, username, user);
-        if (user == null) {
-            throw new GlobalException(CodeMsg.USER_NOT_EXIST);
-        }
-        return user;
-    }
-
 
 
     public void loginAll(HttpServletResponse response) {
@@ -127,7 +108,7 @@ public class UserService {
      * 标示token对应哪个用户
      */
     private void addCookie(HttpServletResponse response, String token) {
-        redisService.set(UserTokenKeyPrefix.userTokenPrefix, token, null);
+        redisService.set(UserTokenKeyPrefix.userTokenPrefix, token, token);
         Cookie cookie = new Cookie(COOKIE_TOKEN_NAME, token);
         cookie.setMaxAge(UserTokenKeyPrefix.userTokenPrefix.expireSeconds());
         cookie.setPath("/");

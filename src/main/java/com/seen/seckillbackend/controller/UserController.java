@@ -3,7 +3,6 @@ package com.seen.seckillbackend.controller;
 import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.service.UserService;
 import com.seen.seckillbackend.util.Result;
-import com.seen.seckillbackend.vo.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,7 @@ public class UserController {
     @ResponseBody
     public Result<String> login(HttpServletResponse response, @RequestBody User user) {
         String token = userService.login(response,user);
-        return Result.success(token);
+        return Result.success("登录成功");
     }
 
     /**
@@ -32,7 +31,7 @@ public class UserController {
      */
     @GetMapping("/login_all")
     @ResponseBody
-    public Result<Integer> login(HttpServletResponse response) {
+    public Result<Integer> loginAll(HttpServletResponse response) {
         userService.loginAll(response);
         return Result.success(0);
     }

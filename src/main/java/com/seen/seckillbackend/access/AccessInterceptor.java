@@ -4,6 +4,8 @@ import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.redis.RedisService;
 import com.seen.seckillbackend.redis.key.AccessKeyPrefix;
 import com.seen.seckillbackend.service.UserService;
+import com.seen.seckillbackend.util.CodeMsg;
+import com.seen.seckillbackend.util.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 拦截请求
@@ -30,11 +33,13 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     RedisService redisService;
 
+    /**
+     * false表示流程中断（如登录检查失败），不会继续调用其他的拦截器或处理器，此时我们需要通过response来产生响应；
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         if (handler instanceof HandlerMethod) {
-            // 在拦截器中取出User 对象
             Long uid = this.getUid(request, response);
             UserContext.setUid(uid);
 
@@ -46,7 +51,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
     /**
      * 限流防刷
      */
-    private boolean limitAccess(HttpServletRequest request, HttpServletResponse response, Object handler, Long uid) {
+    private boolean limitAccess(HttpServletRequest request, HttpServletResponse response, Object handler, Long uid) throws IOException {
         HandlerMethod hm = (HandlerMethod) handler;
         AccessLimit accessLimit = hm.getMethodAnnotation(AccessLimit.class);
 
@@ -60,7 +65,10 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
         String key = request.getRequestURI();
 
         if (needLogin && null == uid) {
-            log.error("需要登录");
+            log.error("用户需要登录");
+            response.setStatus(400);
+            response.setContentType("application/json; charset=UTF-8");
+            response.getWriter().print(Result.err(CodeMsg.USER_NOT_EXIST));
             return false;
         }
         if (null != uid) {
@@ -81,6 +89,9 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
+    /**
+     * 在拦截器中取出User.Uid
+     */
     public Long getUid(HttpServletRequest request, HttpServletResponse response) {
         String paramToken = request.getParameter(UserService.COOKIE_TOKEN_NAME);
         String cookieToken = getCookieValue(request, UserService.COOKIE_TOKEN_NAME);
@@ -89,7 +100,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
             return null;
         }
         String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-        return userService.getByToken(response, token);
+        return userService.getUidByToken(response, token);
     }
 
     private String getCookieValue(HttpServletRequest request, String cookieName) {
@@ -104,6 +115,4 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
         }
         return null;
     }
-
-
 }

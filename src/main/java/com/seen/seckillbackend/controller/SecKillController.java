@@ -60,6 +60,9 @@ public class SecKillController implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
+        orderService.reset();
+        goodsService.reset();
+        redisService.deleteAll();
         List<Goods> goodsList = goodsService.getGoodsList();
         if (null == goodsList) {
             return;
@@ -98,7 +101,7 @@ public class SecKillController implements InitializingBean {
          */
         SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, uid + "_" + goodsId, SeckillOrder.class);
         if (null != seckillOrder) {
-            log.info("错误：已经购买过了");
+            log.info("错误：重复购买");
             return null;
         } else {
             // 预减库存

@@ -12,6 +12,13 @@ public class AesCryption {
     private static Cipher cipher;
     private static Key key;
 
+    public static void main(String[] args) {
+        String encrypt = encrypt("12993020394,salt");
+        System.out.println(encrypt);
+        String decrypt = decrypt(encrypt);
+        System.out.println(decrypt);
+    }
+
     static {
         // 生成KEY
         try {
