@@ -1,0 +1,97 @@
+{
+  "groups": [
+    {
+      "name": "redis",
+      "type": "com.seen.seckillbackend.middleware.redis.single.RedisProperties",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.single.RedisProperties"
+    },
+    {
+      "name": "redis-cluster",
+      "type": "com.seen.seckillbackend.middleware.redis.cluster.RedisClusterProperties",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.cluster.RedisClusterProperties"
+    },
+    {
+      "name": "spring.datasource",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.seen.seckillbackend.middleware.druild.DruidConfig",
+      "sourceMethod": "druidDataSource()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "redis-cluster.hosts",
+      "type": "java.lang.String",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.cluster.RedisClusterProperties"
+    },
+    {
+      "name": "redis-cluster.password",
+      "type": "java.lang.String",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.cluster.RedisClusterProperties"
+    },
+    {
+      "name": "redis-cluster.pool-max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.cluster.RedisClusterProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis-cluster.pool-max-total",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.cluster.RedisClusterProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis-cluster.pool-max-wait",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.cluster.RedisClusterProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis-cluster.timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.cluster.RedisClusterProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis.host",
+      "type": "java.lang.String",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.single.RedisProperties"
+    },
+    {
+      "name": "redis.password",
+      "type": "java.lang.String",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.single.RedisProperties"
+    },
+    {
+      "name": "redis.pool-max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.single.RedisProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis.pool-max-total",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.single.RedisProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis.pool-max-wait",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.single.RedisProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.single.RedisProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "redis.timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seen.seckillbackend.middleware.redis.single.RedisProperties",
+      "defaultValue": 0
+    }
+  ],
+  "hints": []
+}

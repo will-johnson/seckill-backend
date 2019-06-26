@@ -1,9 +1,10 @@
 # SecKill
 ## 概览
-基于nginx + tomcat集群 + redis + rabbitmq的高并发秒杀后端
+基于nginx + tomcat集群 + redis集群 + rabbitmq的高并发秒杀后端
 ![img](./src/main/resources/imgs/diagram.png)
 
-- tomcat集群、nginx使用Docker容器
+- 基于Docker的Redis集群，tomcat集群，nginx
+- Redis集群使用一致性哈希算法
 - jenkins实现代码提交自动部署到tomcat docker容器
 
 ### 分布式Session

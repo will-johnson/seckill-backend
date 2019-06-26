@@ -3,12 +3,11 @@ package com.seen.seckillbackend.controller;
 import com.seen.seckillbackend.access.AccessLimit;
 import com.seen.seckillbackend.domain.Goods;
 import com.seen.seckillbackend.domain.SeckillOrder;
-import com.seen.seckillbackend.domain.User;
-import com.seen.seckillbackend.rabbitmq.MQSender;
-import com.seen.seckillbackend.rabbitmq.SeckillMessage;
-import com.seen.seckillbackend.redis.RedisService;
-import com.seen.seckillbackend.redis.key.GoodsKeyPrefix;
-import com.seen.seckillbackend.redis.key.OrderKeyPrefix;
+import com.seen.seckillbackend.middleware.rabbitmq.MQSender;
+import com.seen.seckillbackend.middleware.rabbitmq.SeckillMessage;
+import com.seen.seckillbackend.middleware.redis.single.RedisService;
+import com.seen.seckillbackend.middleware.redis.key.GoodsKeyPrefix;
+import com.seen.seckillbackend.middleware.redis.key.OrderKeyPrefix;
 import com.seen.seckillbackend.service.GoodsService;
 import com.seen.seckillbackend.service.OrderService;
 import com.seen.seckillbackend.service.UserService;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 

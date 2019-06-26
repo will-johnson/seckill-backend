@@ -1,6 +1,5 @@
 package com.seen.seckillbackend.access;
 
-import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -39,6 +38,4 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         return UserContext.getUid();
     }
-
-
 }

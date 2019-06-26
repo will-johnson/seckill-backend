@@ -1,12 +1,10 @@
 package com.seen.seckillbackend.service;
 
 import com.seen.seckillbackend.dao.UserDao;
-import com.seen.seckillbackend.domain.Goods;
 import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.exception.GlobalException;
-import com.seen.seckillbackend.redis.RedisService;
-import com.seen.seckillbackend.redis.key.UserKeyPrefix;
-import com.seen.seckillbackend.redis.key.UserTokenKeyPrefix;
+import com.seen.seckillbackend.middleware.redis.single.RedisService;
+import com.seen.seckillbackend.middleware.redis.key.UserTokenKeyPrefix;
 import com.seen.seckillbackend.util.AesCryption;
 import com.seen.seckillbackend.util.CodeMsg;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +18,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class UserService {

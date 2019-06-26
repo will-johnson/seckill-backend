@@ -1,8 +1,7 @@
 package com.seen.seckillbackend.access;
 
-import com.seen.seckillbackend.domain.User;
-import com.seen.seckillbackend.redis.RedisService;
-import com.seen.seckillbackend.redis.key.AccessKeyPrefix;
+import com.seen.seckillbackend.middleware.redis.single.RedisService;
+import com.seen.seckillbackend.middleware.redis.key.AccessKeyPrefix;
 import com.seen.seckillbackend.service.UserService;
 import com.seen.seckillbackend.util.CodeMsg;
 import com.seen.seckillbackend.util.Result;
