@@ -1,4 +1,4 @@
-package com.seen.seckillbackend.util;
+package com.seen.seckillbackend.common.util;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 

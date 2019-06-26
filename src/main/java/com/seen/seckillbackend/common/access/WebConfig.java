@@ -1,4 +1,4 @@
-package com.seen.seckillbackend.access;
+package com.seen.seckillbackend.common.access;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

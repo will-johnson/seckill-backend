@@ -1,7 +1,7 @@
 package com.seen.seckillbackend.middleware.redis.cluster;
 
 import com.seen.seckillbackend.middleware.redis.key.KeyPrefix;
-import com.seen.seckillbackend.util.StringBean;
+import com.seen.seckillbackend.common.util.StringBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;

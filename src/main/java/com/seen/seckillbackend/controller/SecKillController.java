@@ -1,6 +1,6 @@
 package com.seen.seckillbackend.controller;
 
-import com.seen.seckillbackend.access.AccessLimit;
+import com.seen.seckillbackend.common.access.AccessLimit;
 import com.seen.seckillbackend.domain.Goods;
 import com.seen.seckillbackend.domain.SeckillOrder;
 import com.seen.seckillbackend.middleware.rabbitmq.MQSender;
@@ -11,8 +11,8 @@ import com.seen.seckillbackend.middleware.redis.key.OrderKeyPrefix;
 import com.seen.seckillbackend.service.GoodsService;
 import com.seen.seckillbackend.service.OrderService;
 import com.seen.seckillbackend.service.UserService;
-import com.seen.seckillbackend.util.CodeMsg;
-import com.seen.seckillbackend.util.Result;
+import com.seen.seckillbackend.common.response.CodeMsg;
+import com.seen.seckillbackend.common.response.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;

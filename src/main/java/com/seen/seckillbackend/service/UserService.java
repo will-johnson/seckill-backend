@@ -2,11 +2,11 @@ package com.seen.seckillbackend.service;
 
 import com.seen.seckillbackend.dao.UserDao;
 import com.seen.seckillbackend.domain.User;
-import com.seen.seckillbackend.exception.GlobalException;
+import com.seen.seckillbackend.common.response.GlobalException;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
 import com.seen.seckillbackend.middleware.redis.key.UserTokenKeyPrefix;
-import com.seen.seckillbackend.util.AesCryption;
-import com.seen.seckillbackend.util.CodeMsg;
+import com.seen.seckillbackend.common.util.AesCryption;
+import com.seen.seckillbackend.common.response.CodeMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

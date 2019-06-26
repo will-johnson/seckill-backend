@@ -1,9 +1,10 @@
-package com.seen.seckillbackend.exception;
+package com.seen.seckillbackend.common.response;
 
-import com.seen.seckillbackend.util.CodeMsg;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class GlobalException extends RuntimeException {
     private CodeMsg cm;
 

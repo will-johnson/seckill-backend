@@ -2,7 +2,7 @@ package com.seen.seckillbackend.controller;
 
 import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.service.UserService;
-import com.seen.seckillbackend.util.Result;
+import com.seen.seckillbackend.common.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

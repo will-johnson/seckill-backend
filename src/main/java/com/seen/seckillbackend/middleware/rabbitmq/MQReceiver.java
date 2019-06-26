@@ -5,7 +5,7 @@ import com.seen.seckillbackend.domain.SeckillOrder;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
 import com.seen.seckillbackend.middleware.redis.key.OrderKeyPrefix;
 import com.seen.seckillbackend.service.OrderService;
-import com.seen.seckillbackend.util.StringBean;
+import com.seen.seckillbackend.common.util.StringBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,8 @@
 package com.seen.seckillbackend.controller;
 
+import com.seen.seckillbackend.common.response.GlobalException;
+import com.seen.seckillbackend.common.response.CodeMsg;
+import com.seen.seckillbackend.common.response.Result;
 import com.seen.seckillbackend.middleware.redis.cluster.RedisClusterService;
 import com.seen.seckillbackend.middleware.redis.key.GoodsKeyPrefix;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +29,17 @@ public class TestController {
     public boolean flush(){
         redisClusterService.deleteAll();
         return true;
+    }
+
+    @GetMapping("/exception")
+    @ResponseBody
+    public Result<String> excep() {
+        try {
+            int i = 0;
+            int j = 10 / i;
+        } catch (Exception e) {
+           throw e;
+        }
+        return Result.success("123");
     }
 }

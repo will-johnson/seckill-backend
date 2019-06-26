@@ -1,6 +1,6 @@
 package com.seen.seckillbackend.middleware.rabbitmq;
 
-import com.seen.seckillbackend.util.StringBean;
+import com.seen.seckillbackend.common.util.StringBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

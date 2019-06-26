@@ -1,4 +1,4 @@
-package com.seen.seckillbackend.access;
+package com.seen.seckillbackend.common.access;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,6 +1,4 @@
-package com.seen.seckillbackend.access;
-
-import com.seen.seckillbackend.domain.User;
+package com.seen.seckillbackend.common.access;
 
 /**
  * ThreadLocal存储User信息

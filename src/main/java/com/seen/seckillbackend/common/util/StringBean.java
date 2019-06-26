@@ -1,4 +1,4 @@
-package com.seen.seckillbackend.util;
+package com.seen.seckillbackend.common.util;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Component;

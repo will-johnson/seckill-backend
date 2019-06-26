@@ -1,10 +1,10 @@
-package com.seen.seckillbackend.access;
+package com.seen.seckillbackend.common.access;
 
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
 import com.seen.seckillbackend.middleware.redis.key.AccessKeyPrefix;
 import com.seen.seckillbackend.service.UserService;
-import com.seen.seckillbackend.util.CodeMsg;
-import com.seen.seckillbackend.util.Result;
+import com.seen.seckillbackend.common.response.CodeMsg;
+import com.seen.seckillbackend.common.response.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
