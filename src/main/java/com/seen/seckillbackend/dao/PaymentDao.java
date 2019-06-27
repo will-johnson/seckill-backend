@@ -1,6 +1,6 @@
 package com.seen.seckillbackend.dao;
 
-import com.seen.seckillbackend.domain.UnpaidOrder;
+import com.seen.seckillbackend.domain.SeckillOrder;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PaymentDao {
 
-    public void insert(UnpaidOrder unpaidOrder);
+    public void insert(SeckillOrder seckillOrder);
 }

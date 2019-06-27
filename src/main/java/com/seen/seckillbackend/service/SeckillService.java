@@ -4,9 +4,9 @@ import com.seen.seckillbackend.common.response.CodeMsg;
 import com.seen.seckillbackend.common.response.GlobalException;
 import com.seen.seckillbackend.common.util.StringBean;
 import com.seen.seckillbackend.dao.GoodsDao;
-import com.seen.seckillbackend.dao.UnpaidOrderDao;
+import com.seen.seckillbackend.dao.SeckillOrderDao;
 import com.seen.seckillbackend.domain.Goods;
-import com.seen.seckillbackend.domain.UnpaidOrder;
+import com.seen.seckillbackend.domain.SeckillOrder;
 import com.seen.seckillbackend.middleware.rabbitmq.SeckillMessage;
 import com.seen.seckillbackend.middleware.redis.key.OrderKeyPrefix;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
@@ -33,7 +33,7 @@ import java.util.Date;
 public class SeckillService {
 
     @Autowired
-    UnpaidOrderDao unpaidOrderDao;
+    SeckillOrderDao seckillOrderDao;
 
     @Autowired
     GoodsDao goodsDao;
@@ -42,7 +42,7 @@ public class SeckillService {
     RedisService redisService;
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public UnpaidOrder seckill(String message) {
+    public SeckillOrder seckill(String message) {
         SeckillMessage seckillMessage = StringBean.stringToBean(message, SeckillMessage.class);
         Goods goods = seckillMessage.getGoods();
         Long userId = seckillMessage.getUserId();
@@ -53,8 +53,8 @@ public class SeckillService {
 
         // Redis判断是否秒杀到了
         // TODO 撤销订单也要删除Redis中的订单
-        UnpaidOrder unpaidOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, userId + "_" + goods.getId(), UnpaidOrder.class);
-        if (null != unpaidOrder) {
+        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, userId + "_" + goods.getId(), SeckillOrder.class);
+        if (null != seckillOrder) {
             return null;
         }
         return reduceInventory(userId, goods);
@@ -64,7 +64,7 @@ public class SeckillService {
      * 减库存
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public UnpaidOrder reduceInventory(Long userId, Goods goods) {
+    public SeckillOrder reduceInventory(Long userId, Goods goods) {
         int stock = goodsDao.reduceStockById(goods.getId());
         if (stock > 0) {
             log.info("减库存成功");
@@ -80,18 +80,19 @@ public class SeckillService {
      * 下订单
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public UnpaidOrder createOrder(Long userId, Goods goods) {
+    public SeckillOrder createOrder(Long userId, Goods goods) {
         // 写订单
-        UnpaidOrder order = new UnpaidOrder();
+        SeckillOrder order = new SeckillOrder();
         order.setUserId(userId);
         order.setOrderId(System.currentTimeMillis());
         order.setGoodsId(goods.getId());
         order.setQuantity(1);
+        order.setStatus(-1);
         order.setTotalPrice(goods.getPrice());
         order.setCreateTime(new Date());
 
         try {
-            Long insert = unpaidOrderDao.insert(order);
+            Long insert = seckillOrderDao.insert(order);
             redisService.set(OrderKeyPrefix.orderKeyPrefix, userId + "_" + goods.getId(), order);
             log.info("数据库成功插入：" + insert);
         } catch (DuplicateKeyException e) {
@@ -101,7 +102,7 @@ public class SeckillService {
     }
 
     public void reset() {
-        unpaidOrderDao.reset();
+        seckillOrderDao.delAll();
     }
 
 }

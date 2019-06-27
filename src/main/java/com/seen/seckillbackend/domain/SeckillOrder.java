@@ -19,7 +19,7 @@ public class SeckillOrder {
 
     private BigDecimal totalPrice;
 
-    // 0, 已关闭； 1, 订单成功
+    // -1：未支付，0：已关闭； 1：订单成功
     private Integer status;
 
     // 创建时间
