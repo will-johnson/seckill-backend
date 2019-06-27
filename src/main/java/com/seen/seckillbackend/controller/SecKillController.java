@@ -43,12 +43,7 @@ public class SecKillController implements InitializingBean {
     @Autowired
     UserService userService;
 
-
-    /**
-     * 内存标记Map
-     * key : goodsId
-     * value : isOver, true is over.
-     */
+    // 内存标记Map<goodsId, isOver> true is over
     private HashMap<Long, Boolean> localOverMap = new HashMap<Long, Boolean>();
 
     /**
@@ -56,7 +51,7 @@ public class SecKillController implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        orderService.reset();
+//        orderService.reset();
         goodsService.reset();
         redisService.deleteAll();
         List<Goods> goodsList = goodsService.getGoodsList();
@@ -72,6 +67,10 @@ public class SecKillController implements InitializingBean {
 
     /**
      * 高并发访问接口
+     * 1.内存标记，减少redis访问
+     * 2. 先判断是否已经秒杀过了
+     * 3. Redis预减库存
+     * 4. 入队
      */
     @AccessLimit(seconds = 5, maxCount = 5)
     @GetMapping("/seckill/{goodsId}")
@@ -82,22 +81,15 @@ public class SecKillController implements InitializingBean {
             return Result.err(CodeMsg.USER_NEEDS_LOGIN);
         }
 
-        // 1.内存标记，减少redis访问
         if (localOverMap.get(goodsId)) {
             return Result.err(CodeMsg.SECKILL_OVER);
         }
 
-        /**
-         * 2.预减库存
-         * 2. 先判断是否已经秒杀过了
-         * 3. 预减库存
-         * 4. 入队
-         */
         SeckillOrder seckillOrder = redisService.get(OrderKeyPe.orderKeyPe, userId + "_" + goodsId, SeckillOrder.class);
 
         if (null != seckillOrder) {
             log.error("错误：重复购买");
-            return null;
+            return Result.err(CodeMsg.REPEAT_BUY);
         } else {
             // 预减库存
             Long decr = redisService.decr(GoodsKeyPe.goodsKeyPe, "" + goodsId);
@@ -108,10 +100,12 @@ public class SecKillController implements InitializingBean {
             log.info("预减库存成功");
         }
 
-        // 4.入队
         SeckillMessage seckillMessage = new SeckillMessage(userId, goodsService.getGoodById(goodsId));
         sender.send(seckillMessage);
         return Result.success(0); //排队中
     }
+
+
+
 
 }

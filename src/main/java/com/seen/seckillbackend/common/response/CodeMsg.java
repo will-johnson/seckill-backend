@@ -4,6 +4,7 @@ public enum CodeMsg {
 
     // success
     PAY_SUCCESS(200, "Payment success"),
+    CLOSE_ORDER_SUCCESS(200, "Close order success"),
 
     // err
     USER_NULL(500100, "User is null"),
@@ -12,7 +13,8 @@ public enum CodeMsg {
     ACCESS_LIMIT_REACHED(500300, "Request is too frequent"),
     REPEAT_BUY(500301, "repeat buy"),
     PAY_FAIL(500400, "Payment fail"),
-    UNKNOW_ERR(500500, "UNKNOW_ERR");
+    UNKNOW_ERR(500500, "UNKNOW_ERR"),
+    CLOSE_ORDER_FAIL(500501, "Close order failed");
 
 
     private int code;

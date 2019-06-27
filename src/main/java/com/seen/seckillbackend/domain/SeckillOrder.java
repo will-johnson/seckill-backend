@@ -7,6 +7,10 @@ import java.util.Date;
 
 @Data
 public class SeckillOrder {
+    private final static int UNPAID = -1;
+    private final static int CLOSED = 0;
+    private final static int SUCCESS = 1;
+
     private Long id;
 
     private Long orderId;
