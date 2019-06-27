@@ -10,7 +10,7 @@
 ### 分布式Session
 解决请求负载均衡到不同tomcat服务器的session共享问题
 
-token = 加密（uid + 加密信息）
+token = 加密（userId + 加密信息）
 
 用户下次请求，HandlerInterceptorAdapter拦截请求，从请求中拿出token, 查看redis中是否存在，解密对比加密信息
 是否一致，存在且一致则取出uid，放入ThreadLocal中。
@@ -24,6 +24,9 @@ token = 加密（uid + 加密信息）
 - [ ]  DB乐观锁
 - [ ] Redis前缀优化
 - [ ] 用户登出
+- [ ] 异步下单结果通知
+- [ ] Scheduled 定时关单
+- [ ] tomcat集群使用分布式锁进行关单
 
 - 单一Session服务器，主备模式
 - 秒杀订单Redis服务器，主备模式

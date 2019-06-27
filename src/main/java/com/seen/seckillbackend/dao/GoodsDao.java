@@ -17,7 +17,8 @@ public interface GoodsDao {
     @Select("select * from goods where id = #{id}")
     Goods getGoodById(long id);
 
-    //  防止卖超
+    // 防止卖超
+    // 返回影响的行数
     @Update("update goods set stock = stock - 1 where id = #{id} and stock >0")
     int reduceStockById(long id);
 

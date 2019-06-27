@@ -9,7 +9,7 @@ import com.seen.seckillbackend.middleware.redis.single.RedisService;
 import com.seen.seckillbackend.middleware.redis.key.GoodsKeyPrefix;
 import com.seen.seckillbackend.middleware.redis.key.OrderKeyPrefix;
 import com.seen.seckillbackend.service.GoodsService;
-import com.seen.seckillbackend.service.OrderService;
+import com.seen.seckillbackend.service.SeckillService;
 import com.seen.seckillbackend.service.UserService;
 import com.seen.seckillbackend.common.response.CodeMsg;
 import com.seen.seckillbackend.common.response.Result;
@@ -38,23 +38,21 @@ public class SecKillController implements InitializingBean {
     MQSender sender;
 
     @Autowired
-    OrderService orderService;
+    SeckillService orderService;
 
     @Autowired
     UserService userService;
 
 
     /**
-     * 内存标记
+     * 内存标记Map
      * key : goodsId
      * value : isOver, true is over.
      */
     private HashMap<Long, Boolean> localOverMap = new HashMap<Long, Boolean>();
 
     /**
-     * 系统初始化
-     * 加载进redis
-     * @throws Exception
+     * 系统初始化, 秒杀商品库存加载进redis
      */
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -74,20 +72,18 @@ public class SecKillController implements InitializingBean {
 
     /**
      * 高并发访问接口
-     * TODO 秒杀接口地址隐藏
      */
     @AccessLimit(seconds = 5, maxCount = 5)
     @GetMapping("/seckill/{goodsId}")
     @ResponseBody
-    public Result<Integer> seckill(Long uid, @PathVariable long goodsId) {
-        if (uid == null) {
+    public Result<Integer> seckill(Long userId, @PathVariable long goodsId) {
+        if (userId == null) {
             log.info("用户未登录");
-            return Result.err(CodeMsg.USER_NOT_EXIST);
+            return Result.err(CodeMsg.USER_NEEDS_LOGIN);
         }
 
         // 1.内存标记，减少redis访问
-        Boolean isOver = localOverMap.get(goodsId);
-        if (isOver) {
+        if (localOverMap.get(goodsId)) {
             return Result.err(CodeMsg.SECKILL_OVER);
         }
 
@@ -97,9 +93,10 @@ public class SecKillController implements InitializingBean {
          * 3. 预减库存
          * 4. 入队
          */
-        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, uid + "_" + goodsId, SeckillOrder.class);
+        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, userId + "_" + goodsId, SeckillOrder.class);
+
         if (null != seckillOrder) {
-            log.info("错误：重复购买");
+            log.error("错误：重复购买");
             return null;
         } else {
             // 预减库存
@@ -112,9 +109,8 @@ public class SecKillController implements InitializingBean {
         }
 
         // 4.入队
-        SeckillMessage seckillMessage = new SeckillMessage(uid, goodsService.getGoodById(goodsId));
+        SeckillMessage seckillMessage = new SeckillMessage(userId, goodsService.getGoodById(goodsId));
         sender.send(seckillMessage);
-        log.info("RabbitMQ 消息发送成功");
         return Result.success(0); //排队中
     }
 

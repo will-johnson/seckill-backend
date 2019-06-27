@@ -36,6 +36,6 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
      */
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        return UserContext.getUid();
+        return UserContext.getUserId();
     }
 }

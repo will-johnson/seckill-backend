@@ -16,11 +16,9 @@ public class GlobalExceptionHandler  {
     @ResponseBody
     public Result handle(Exception e) {
         if (e instanceof GlobalException) {
-            log.error("自定义异常",e);
             GlobalException exception = (GlobalException)e;
             return Result.err(exception.getCm());
         }else{
-            log.error("系统异常",e);
             return Result.err(CodeMsg.UNKNOW_ERR.getCode(), e.getMessage());
         }
     }

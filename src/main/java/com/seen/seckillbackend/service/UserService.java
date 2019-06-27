@@ -35,16 +35,16 @@ public class UserService {
     GoodsService goodsService;
 
     @Autowired
-    OrderService orderService;
+    SeckillService orderService;
 
     public String login(HttpServletResponse response, User user) {
         if (null == user) {
-            throw new GlobalException(CodeMsg.SERVER_ERROR);
+            throw new GlobalException(CodeMsg.USER_NULL);
         }
         //TODO 验证密码
 
         //生成token, token = (userid +"," + 加密信息）
-        String tokenSrc = user.getUid()  + "," + TOKEN_SALT;
+        String tokenSrc = user.getUserId()  + "," + TOKEN_SALT;
         String token = AesCryption.encrypt(tokenSrc);
 
         this.addCookie(response, token);
@@ -90,7 +90,7 @@ public class UserService {
             BufferedWriter out = new BufferedWriter(fw);
             for (User user : allUser) {
                 String token = this.login(response, user);
-                String line = user.getUid() + "," + token + "\n";
+                String line = user.getUserId() + "," + token + "\n";
                 out.write(line);
             }
             out.close();

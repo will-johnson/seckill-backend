@@ -43,16 +43,17 @@ spring:
         max-concurrency: 10
         # 每次取几个
         prefetch: 1
+        # 指示容器是否随着ApplicationContext的启动而启动。设置这个值为false，如果在你启动的时候消息代理还没有启动，当消息代理准备好的时候调用start()方法手动启动。
         auto-startup: true
         # 消费失败重新压入
-        default-requeue-rejected: true
-    template:
-      retry:
-        enabled: true
-        initial-interval: 1000
-        max-attempts: 3
-        max-interval: 10000
-        multiplier: 1
+        default-requeue-rejected: false
+        retry:
+          enabled: false
+          max-attempts: 1
+          # 重试间隔时间（单位毫秒）
+          initial-interval: 1000
+          # Maximum duration between attempts
+          max-interval: 10000
 
 mybatis:
   type-aliases-package: com.seen.seckillbackend.domain.model

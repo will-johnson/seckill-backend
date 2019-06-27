@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping("/login")
     @ResponseBody
     public Result<String> login(HttpServletResponse response, @RequestBody User user) {
-        String token = userService.login(response,user);
+        userService.login(response,user);
         return Result.success("登录成功");
     }
 

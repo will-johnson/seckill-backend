@@ -6,11 +6,11 @@ package com.seen.seckillbackend.common.access;
 public class UserContext {
     private static ThreadLocal<Long> userHolder = new ThreadLocal<>();
 
-    public static void setUid(Long uid) {
-        userHolder.set(uid);
+    public static void setUserId(Long userId) {
+        userHolder.set(userId);
     }
 
-    public static Long getUid() {
+    public static Long getUserId() {
         return userHolder.get();
     }
 

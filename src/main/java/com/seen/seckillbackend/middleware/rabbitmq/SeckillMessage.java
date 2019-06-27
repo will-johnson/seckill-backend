@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class SeckillMessage {
-    private Long uid;
+    private Long userId;
     private Goods goods;
 }
