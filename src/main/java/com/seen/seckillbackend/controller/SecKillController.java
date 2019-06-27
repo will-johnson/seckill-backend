@@ -6,8 +6,8 @@ import com.seen.seckillbackend.domain.SeckillOrder;
 import com.seen.seckillbackend.middleware.rabbitmq.MQSender;
 import com.seen.seckillbackend.middleware.rabbitmq.SeckillMessage;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
-import com.seen.seckillbackend.middleware.redis.key.GoodsKeyPrefix;
-import com.seen.seckillbackend.middleware.redis.key.OrderKeyPrefix;
+import com.seen.seckillbackend.middleware.redis.key.GoodsKeyPe;
+import com.seen.seckillbackend.middleware.redis.key.OrderKeyPe;
 import com.seen.seckillbackend.service.GoodsService;
 import com.seen.seckillbackend.service.SeckillService;
 import com.seen.seckillbackend.service.UserService;
@@ -65,7 +65,7 @@ public class SecKillController implements InitializingBean {
         }
         for (Goods goods : goodsList) {
             long stock = goodsService.getGoodsStockById(goods.getId());
-            redisService.set(GoodsKeyPrefix.goodsStockPrefix, "" + goods.getId(), (int)(stock * 1.5));
+            redisService.set(GoodsKeyPe.goodsKeyPe, "" + goods.getId(), (int)(stock * 1.5));
             localOverMap.put(goods.getId(), false);
         }
     }
@@ -93,14 +93,14 @@ public class SecKillController implements InitializingBean {
          * 3. 预减库存
          * 4. 入队
          */
-        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, userId + "_" + goodsId, SeckillOrder.class);
+        SeckillOrder seckillOrder = redisService.get(OrderKeyPe.orderKeyPe, userId + "_" + goodsId, SeckillOrder.class);
 
         if (null != seckillOrder) {
             log.error("错误：重复购买");
             return null;
         } else {
             // 预减库存
-            Long decr = redisService.decr(GoodsKeyPrefix.goodsStockPrefix, "" + goodsId);
+            Long decr = redisService.decr(GoodsKeyPe.goodsKeyPe, "" + goodsId);
             if (decr < 0) {
                 localOverMap.put(goodsId, true);
                 return Result.err(CodeMsg.SECKILL_OVER);

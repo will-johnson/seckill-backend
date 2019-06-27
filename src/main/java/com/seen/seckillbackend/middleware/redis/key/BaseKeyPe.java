@@ -1,21 +1,21 @@
 package com.seen.seckillbackend.middleware.redis.key;
 
-public abstract class BaseKeyPrefix implements KeyPrefix {
+public abstract class BaseKeyPe implements KeyPe {
     private int expireSeconds;
     private String prefix;
 
-    public BaseKeyPrefix(String prefix) {//0代表永不过期
+    public BaseKeyPe(String prefix) {//0代表永不过期
         this(0, prefix);
     }
 
-    public BaseKeyPrefix(int expireSeconds, String prefix) {
+    public BaseKeyPe(int expireSeconds, String prefix) {
         this.expireSeconds = expireSeconds;
         this.prefix = prefix;
     }
 
 
     @Override
-    public int expireSeconds() {
+    public int getExpireSeconds() {
         return expireSeconds;
     }
 

@@ -1,6 +1,6 @@
 package com.seen.seckillbackend.middleware.redis.single;
 
-import com.seen.seckillbackend.middleware.redis.key.KeyPrefix;
+import com.seen.seckillbackend.middleware.redis.key.KeyPe;
 import com.seen.seckillbackend.common.util.StringBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class RedisService {
     /**
      * 获取单个对象
      * */
-    public <T> T get(KeyPrefix prefix, String key, Class<T> clazz) {
+    public <T> T get(KeyPe prefix, String key, Class<T> clazz) {
         Jedis jedis = null;
         try {
             jedis =  jedisPool.getResource();
@@ -45,7 +45,7 @@ public class RedisService {
     /**
      * 设置对象 和 存活时间，更新存活时间
      * */
-    public <T> boolean set(KeyPrefix prefix, String key,  T value) {
+    public <T> boolean set(KeyPe prefix, String key, T value) {
         Jedis jedis = null;
         try {
             jedis =  jedisPool.getResource();
@@ -55,7 +55,7 @@ public class RedisService {
             }
             //生成真正的key
             String realKey  = prefix.getPrefix() + key;
-            int seconds =  prefix.expireSeconds();
+            int seconds =  prefix.getExpireSeconds();
             if(seconds <= 0) {
                 jedis.set(realKey, str);
             }else {
@@ -70,7 +70,7 @@ public class RedisService {
     /**
      * 判断key是否存在
      * */
-    public <T> boolean exists(KeyPrefix prefix, String key) {
+    public <T> boolean exists(KeyPe prefix, String key) {
         Jedis jedis = null;
         try {
             jedis =  jedisPool.getResource();
@@ -85,7 +85,7 @@ public class RedisService {
     /**
      * 删除
      * */
-    public boolean delete(KeyPrefix prefix, String key) {
+    public boolean delete(KeyPe prefix, String key) {
         Jedis jedis = null;
         try {
             jedis =  jedisPool.getResource();
@@ -101,7 +101,7 @@ public class RedisService {
     /**
      * 增加值
      * */
-    public <T> Long incr(KeyPrefix prefix, String key) {
+    public <T> Long incr(KeyPe prefix, String key) {
         Jedis jedis = null;
         try {
             jedis =  jedisPool.getResource();
@@ -116,7 +116,7 @@ public class RedisService {
     /**
      * 减少值
      * */
-    public <T> Long decr(KeyPrefix prefix, String key) {
+    public <T> Long decr(KeyPe prefix, String key) {
         Jedis jedis = null;
         try {
             jedis =  jedisPool.getResource();
@@ -128,7 +128,7 @@ public class RedisService {
         }
     }
 
-    public boolean delete(KeyPrefix prefix) {
+    public boolean delete(KeyPe prefix) {
         if(prefix == null) {
             return false;
         }

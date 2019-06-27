@@ -54,6 +54,15 @@ spring:
           initial-interval: 1000
           # Maximum duration between attempts
           max-interval: 10000
+  redis:
+    host: 106.13.128.45
+    port: 6379
+    timeout: 10
+    password: 135790
+    # 太小会导致获取不到连接
+    poolMaxTotal: 1000
+    poolMaxIdle: 500
+    poolMaxWait: 500
 
 mybatis:
   type-aliases-package: com.seen.seckillbackend.domain.model
@@ -66,15 +75,7 @@ mybatis:
 server:
   port: 8765
 
-redis:
-  host: 106.13.128.45
-  port: 6379
-  timeout: 10
-  password: 135790
-  # 太小会导致获取不到连接
-  poolMaxTotal: 1000
-  poolMaxIdle: 500
-  poolMaxWait: 500
+
 
 redis-cluster:
   hosts: 106.13.128.45:6379

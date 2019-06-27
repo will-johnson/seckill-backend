@@ -8,7 +8,7 @@ import com.seen.seckillbackend.dao.SeckillOrderDao;
 import com.seen.seckillbackend.domain.Goods;
 import com.seen.seckillbackend.domain.SeckillOrder;
 import com.seen.seckillbackend.middleware.rabbitmq.SeckillMessage;
-import com.seen.seckillbackend.middleware.redis.key.OrderKeyPrefix;
+import com.seen.seckillbackend.middleware.redis.key.OrderKeyPe;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class SeckillService {
 
         // Redis判断是否秒杀到了
         // TODO 撤销订单也要删除Redis中的订单
-        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.orderKeyPrefix, userId + "_" + goods.getId(), SeckillOrder.class);
+        SeckillOrder seckillOrder = redisService.get(OrderKeyPe.orderKeyPe, userId + "_" + goods.getId(), SeckillOrder.class);
         if (null != seckillOrder) {
             return null;
         }
@@ -93,7 +93,7 @@ public class SeckillService {
 
         try {
             Long insert = seckillOrderDao.insert(order);
-            redisService.set(OrderKeyPrefix.orderKeyPrefix, userId + "_" + goods.getId(), order);
+            redisService.set(OrderKeyPe.orderKeyPe, userId + "_" + goods.getId(), order);
             log.info("数据库成功插入：" + insert);
         } catch (DuplicateKeyException e) {
             throw new GlobalException(CodeMsg.REPEAT_BUY);

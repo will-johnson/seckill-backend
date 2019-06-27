@@ -1,10 +1,8 @@
 package com.seen.seckillbackend.controller;
 
-import com.seen.seckillbackend.common.response.GlobalException;
-import com.seen.seckillbackend.common.response.CodeMsg;
 import com.seen.seckillbackend.common.response.Result;
 import com.seen.seckillbackend.middleware.redis.cluster.RedisClusterService;
-import com.seen.seckillbackend.middleware.redis.key.GoodsKeyPrefix;
+import com.seen.seckillbackend.middleware.redis.key.GoodsKeyPe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +19,7 @@ public class TestController {
     @ResponseBody
     public boolean redisCluster() {
         for (int i = 0; i < 10; i++) {
-            redisClusterService.set(GoodsKeyPrefix.goodsStockPrefix, String.valueOf(i), i);
+            redisClusterService.set(GoodsKeyPe.goodsKeyPe, String.valueOf(i), i);
         }
         return true;
     }

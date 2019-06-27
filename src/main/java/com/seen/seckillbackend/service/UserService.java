@@ -4,7 +4,7 @@ import com.seen.seckillbackend.dao.UserDao;
 import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.common.response.GlobalException;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
-import com.seen.seckillbackend.middleware.redis.key.UserTokenKeyPrefix;
+import com.seen.seckillbackend.middleware.redis.key.UserTokenKeyPe;
 import com.seen.seckillbackend.common.util.AesCryption;
 import com.seen.seckillbackend.common.response.CodeMsg;
 import org.apache.commons.lang3.StringUtils;
@@ -56,7 +56,7 @@ public class UserService {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        boolean exists = redisService.exists(UserTokenKeyPrefix.userTokenPrefix, token);
+        boolean exists = redisService.exists(UserTokenKeyPe.userTokenKeyPe, token);
 
         //延长有效期
         if (exists) {
@@ -105,9 +105,9 @@ public class UserService {
      * 标示token对应哪个用户
      */
     private void addCookie(HttpServletResponse response, String token) {
-        redisService.set(UserTokenKeyPrefix.userTokenPrefix, token, token);
+        redisService.set(UserTokenKeyPe.userTokenKeyPe, token, token);
         Cookie cookie = new Cookie(COOKIE_TOKEN_NAME, token);
-        cookie.setMaxAge(UserTokenKeyPrefix.userTokenPrefix.expireSeconds());
+        cookie.setMaxAge(UserTokenKeyPe.userTokenKeyPe.getExpireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
     }

@@ -1,6 +1,6 @@
 package com.seen.seckillbackend.middleware.redis.cluster;
 
-import com.seen.seckillbackend.middleware.redis.key.KeyPrefix;
+import com.seen.seckillbackend.middleware.redis.key.KeyPe;
 import com.seen.seckillbackend.common.util.StringBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class RedisClusterService {
     @Autowired
     ShardedJedisPool shardedJedisPool;
 
-    public <T> T get(KeyPrefix prefix, String key, Class<T> clazz) {
+    public <T> T get(KeyPe prefix, String key, Class<T> clazz) {
         ShardedJedis jedis = null;
         try {
             jedis = shardedJedisPool.getResource();
@@ -34,7 +34,7 @@ public class RedisClusterService {
     /**
      * 设置对象 和 存活时间，更新存活时间
      */
-    public <T> boolean set(KeyPrefix prefix, String key, T value) {
+    public <T> boolean set(KeyPe prefix, String key, T value) {
         ShardedJedis jedis = null;
         try {
             jedis = shardedJedisPool.getResource();
@@ -44,7 +44,7 @@ public class RedisClusterService {
             }
             //生成真正的key
             String realKey = prefix.getPrefix() + key;
-            int seconds = prefix.expireSeconds();
+            int seconds = prefix.getExpireSeconds();
             if (seconds <= 0) {
                 jedis.set(realKey, str);
             } else {
@@ -59,7 +59,7 @@ public class RedisClusterService {
     /**
      * 判断key是否存在
      */
-    public <T> boolean exists(KeyPrefix prefix, String key) {
+    public <T> boolean exists(KeyPe prefix, String key) {
         ShardedJedis jedis = null;
         try {
             jedis = shardedJedisPool.getResource();
@@ -74,7 +74,7 @@ public class RedisClusterService {
     /**
      * 删除
      */
-    public boolean delete(KeyPrefix prefix, String key) {
+    public boolean delete(KeyPe prefix, String key) {
         ShardedJedis jedis = null;
         try {
             jedis = shardedJedisPool.getResource();
@@ -90,7 +90,7 @@ public class RedisClusterService {
     /**
      * 增加值
      */
-    public <T> Long incr(KeyPrefix prefix, String key) {
+    public <T> Long incr(KeyPe prefix, String key) {
         ShardedJedis jedis = null;
         try {
             jedis = shardedJedisPool.getResource();
@@ -105,7 +105,7 @@ public class RedisClusterService {
     /**
      * 减少值
      */
-    public <T> Long decr(KeyPrefix prefix, String key) {
+    public <T> Long decr(KeyPe prefix, String key) {
         ShardedJedis jedis = null;
         try {
             jedis = shardedJedisPool.getResource();
