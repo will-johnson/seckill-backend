@@ -100,7 +100,25 @@
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.redisson/redisson -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.11.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-avro -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-avro</artifactId>
+            <version>2.9.8</version>
+        </dependency>
     </dependencies>
+
+
+
+
+
 
     <build>
         <finalName>${project.artifactId}</finalName>

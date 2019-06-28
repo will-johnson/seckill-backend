@@ -27,4 +27,7 @@ public interface GoodsDao {
 
     @Update("update goods set stock = 10")
     void reset();
+
+    @Update("update goods set stock = stock + #{quantity} where id = #{goodsId}")
+    void updateStockById(Long goodsId, Integer quantity);
 }

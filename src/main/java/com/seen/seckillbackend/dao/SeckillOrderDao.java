@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * insert，返回值是：新插入行的主键（primary key）；需要包含<selectKey>语句，才会返回主键，否则返回值为null。
@@ -36,4 +37,10 @@ public interface SeckillOrderDao {
 
     @Select("select * from seckill_order where order_id = #{orderId}")
     SeckillOrder findByOrderId(Long orderId);
+
+    @Select("select * from seckill_order where status = -1")
+    List<SeckillOrder> findUnpaidOrder();
+
+    @Select("select * from seckill_order where status = -1 and create_time < #{date}")
+    List<SeckillOrder> findUnpaidExpiredOrder(Date date);
 }

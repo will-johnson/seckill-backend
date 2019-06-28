@@ -20,5 +20,4 @@ public class OrderController {
     public Result<CodeMsg> cancelOrder(@PathVariable Long orderId) {
         return orderService.cancelOrder(orderId);
     }
-
 }
