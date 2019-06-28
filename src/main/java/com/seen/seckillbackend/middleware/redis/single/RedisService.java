@@ -67,6 +67,29 @@ public class RedisService {
         }
     }
 
+    /**
+     * Nx & Ex
+     * @param prefix
+     * @param key
+     * @param value
+     * @param time
+     * @param <T>
+     * @return
+     */
+    public <T> String setNxEx(KeyPe prefix, String key, T value, long time) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            String realValue = StringBean.beanToString(value);
+            if (realValue == null || realValue.length() <= 0) {
+                return null;
+            }
+            String realKey = prefix.getPrefix() + key;
+            return jedis.set(realKey, realValue, "nx", "ex", time);
+        } finally {
+            returnToPool(jedis);
+        }
+    }
 
     public <T> T getSet(KeyPe prefix, String key, T value, Class<T> clazz) {
         Jedis jedis = null;
@@ -268,6 +291,16 @@ public class RedisService {
             }
         }
         return true;
+    }
+
+    public Object eval(final String script, final List<String> keys, final List<String> args) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.eval(script, keys, args);
+        } finally {
+            returnToPool(jedis);
+        }
     }
 
     private void returnToPool(Jedis jedis) {
