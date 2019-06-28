@@ -75,7 +75,9 @@ mybatis:
 server:
   port: 8765
 
-
+redisson:
+  address: redis://106.13.128.45:6379
+  password: 135790
 
 redis-cluster:
   hosts: 106.13.128.45:6379

@@ -9,6 +9,8 @@ import com.seen.seckillbackend.middleware.redis.key.DisLockKeyPe;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
@@ -37,6 +40,8 @@ public class CloseOrderTask {
     @Autowired
     RedisService redisService;
 
+    @Autowired
+    RedissonClient redissonClient;
 
     /**
      * 考虑特殊情况下发生的死锁：
@@ -47,13 +52,12 @@ public class CloseOrderTask {
      *
      * 这个方案还是存在缺陷：https://mp.weixin.qq.com/s/qJK61ew0kCExvXrqb7-RSg
      */
-    @Scheduled(cron = "0 */1 * * * ?") // 每隔1分钟关闭超时订单
     public Result<CodeMsg> distributedScheduledCloseOrder() {
         int expireSeconds = DisLockKeyPe.disLockKeyPe.getExpireSeconds();
         Long lock = redisService.setnx(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK, System.currentTimeMillis() + expireSeconds);
         if (null != lock && 1 == lock) {
             log.info("线程{}: 获取分布式锁{} 成功", Thread.currentThread(), CLOSE_ORDER_LOCK);
-            Result<CodeMsg> codeMsgResult = closeOrder();
+            Result<CodeMsg> codeMsgResult = myDistributedLockHepler();
             log.info("线程{}: 释放分布式锁{}", Thread.currentThread(), CLOSE_ORDER_LOCK);
             return codeMsgResult;
         } else {
@@ -75,6 +79,43 @@ public class CloseOrderTask {
         }
     }
 
+    public Result<CodeMsg> myDistributedLockHepler() {
+        Result<CodeMsg> codeMsgResult = closeOrder();
+        redisService.delete(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK);
+        return codeMsgResult;
+    }
+
+
+
+    /**
+     * 利用Redisson分布式锁实现定时关单
+     */
+    @Scheduled(cron = "0 */1 * * * ?") // 每隔1分钟关闭超时订单
+    public Result<CodeMsg> redissonLock(){
+        // TODO prefix
+        RLock lock = redissonClient.getLock(CLOSE_ORDER_LOCK);
+
+        boolean getLock = false;
+        try {
+            getLock = lock.tryLock(2, 5, TimeUnit.SECONDS);
+            if (getLock) {
+                return closeOrder();
+            }else{
+                log.warn("ThreadName:{} 获取到分布式锁:{} 失败",Thread.currentThread().getName());
+            }
+        } catch (InterruptedException e) {
+            log.error("获取分布式锁异常: ", e);
+            e.printStackTrace();
+        }finally {
+            if (getLock) {
+                lock.unlock();
+                log.info("Redisson释放分布式锁");
+            }
+        }
+        return null;
+    }
+
+
     /**
      * 注意：保证事务性
      * 1. 关闭订单
@@ -89,7 +130,6 @@ public class CloseOrderTask {
             closeAndReturn(unpaidOrder);
             log.warn("关闭订单: {}", unpaidOrder);
         }
-        redisService.delete(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK);
         return Result.success(CodeMsg.CLOSE_ORDER_SUCCESS);
     }
 
