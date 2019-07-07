@@ -28,6 +28,8 @@ import java.util.concurrent.TimeUnit;
  * About Distributed Lock
  * https://baijiahao.baidu.com/s?id=1623086259657780069&wfr=spider&for=pc
  * https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/
+ *
+ * redis + lua https://www.imooc.com/video/17799
  */
 @Component
 @Slf4j

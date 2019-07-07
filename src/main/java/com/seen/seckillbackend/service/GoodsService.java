@@ -13,6 +13,11 @@ public class GoodsService {
     @Autowired
     GoodsDao goodsDao;
 
+    public boolean reduceStockById(long id, int buy) {
+        int red = goodsDao.reduceStockById(id, buy );
+        return red>0;
+    }
+
     public List<Goods> getGoodsList() {
         return goodsDao.getGoodsList();
     }
@@ -21,10 +26,6 @@ public class GoodsService {
         return goodsDao.getGoodById(id);
     }
 
-    public boolean reduceStockById(long id) {
-        int red = goodsDao.reduceStockById(id);
-        return red>0;
-    }
 
     public Long getGoodsStockById(long id) {
         return goodsDao.getGoodsStockById(id);

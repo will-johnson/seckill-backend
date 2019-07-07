@@ -28,9 +28,9 @@ public class GoodsController {
         return goodsService.getGoodById(id);
     }
 
-    @GetMapping("/goods/{id}/sold")
+    @GetMapping("/goods/{id}/sold/{buy}")
     @ResponseBody
-    public boolean reduceStockById(@PathVariable int id) {
-        return goodsService.reduceStockById(id);
+    public boolean reduceStockById(@PathVariable int id, @PathVariable int buy) {
+        return goodsService.reduceStockById(id, buy);
     }
 }
