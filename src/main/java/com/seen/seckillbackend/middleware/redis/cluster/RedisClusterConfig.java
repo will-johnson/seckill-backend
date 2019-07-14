@@ -12,13 +12,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Configuration
+//@Configuration
 public class RedisClusterConfig {
 
-    @Autowired
+//    @Autowired
     private RedisClusterProperties redisClusterProperties;
 
-    @Bean
+//    @Bean
     public ShardedJedisPool getShardedJedisPool() {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxIdle(redisClusterProperties.getPoolMaxIdle());

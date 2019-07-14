@@ -5,8 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Data
-@Component
-@ConfigurationProperties(prefix = "redis-cluster")
+//@Component
+//@ConfigurationProperties(prefix = "redis-cluster")
 public class RedisClusterProperties {
     private String hosts;
     private int timeout;

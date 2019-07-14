@@ -11,10 +11,10 @@ import redis.clients.jedis.ShardedJedisPool;
 import java.util.Collection;
 
 
-@Service
+//@Service
 public class RedisClusterService {
 
-    @Autowired
+//    @Autowired
     ShardedJedisPool shardedJedisPool;
 
     public <T> T get(KeyPe prefix, String key, Class<T> clazz) {

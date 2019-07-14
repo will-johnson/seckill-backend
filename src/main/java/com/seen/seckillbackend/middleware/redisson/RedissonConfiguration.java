@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConditionalOnClass(Config.class)
-//@EnableConfigurationProperties(RedissonProperties.class)
 public class RedissonConfiguration {
 
     @Autowired
@@ -25,7 +24,6 @@ public class RedissonConfiguration {
      * @return
      */
     @Bean
-//    @ConditionalOnProperty(name = "redisson.address")
     RedissonClient redissonSingle() {
         Config config = new Config();
         SingleServerConfig serverConfig = config.useSingleServer()
@@ -40,26 +38,5 @@ public class RedissonConfiguration {
 
         return Redisson.create(config);
     }
-
-
-    //    /**
-//     * 哨兵模式自动装配
-//     * @return
-//     */
-//    @Bean
-//    @ConditionalOnProperty(name="redisson.master-name")
-//    RedissonClient redissonSentinel() {
-//        Config config = new Config();
-//        SentinelServersConfig serverConfig = config.useSentinelServers().addSentinelAddress(redssionProperties.getSentinelAddresses())
-//                .setMasterName(redssionProperties.getMasterName())
-//                .setTimeout(redssionProperties.getTimeout())
-//                .setMasterConnectionPoolSize(redssionProperties.getMasterConnectionPoolSize())
-//                .setSlaveConnectionPoolSize(redssionProperties.getSlaveConnectionPoolSize());
-//
-//        if(StringUtils.isNotBlank(redssionProperties.getPassword())) {
-//            serverConfig.setPassword(redssionProperties.getPassword());
-//        }
-//        return Redisson.create(config);
-//    }
 
 }
