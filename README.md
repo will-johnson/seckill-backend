@@ -1,7 +1,7 @@
 # SecKill
 ## 概览
 基于Nginx + Tomcat集群 + Redis集群 + RabbitMQ的高并发秒杀后端
-![img](./src/main/resources/imgs/diagram2.0.png)
+![img](./src/main/resources/imgs/diagram.png)
 
 ### 1. 系统概述：
 

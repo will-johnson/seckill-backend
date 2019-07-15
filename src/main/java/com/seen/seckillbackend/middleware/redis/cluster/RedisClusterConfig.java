@@ -39,15 +39,3 @@ public class RedisClusterConfig {
                 redisClusterProperties.getPassword(), poolConfig);
     }
 }
-
-/*
-    */
-/**
- * nodeset
- *
- * int soTimeout,
- * int maxAttempts,
- * String password,
- * String clientName,
- * GenericObjectPoolConfig poolConfig)
- */
