@@ -54,9 +54,9 @@
 
 ### 架构层
 - [x] 基于Docker的Nginx、Tomcat集群、多Redis集群、RabbitMQ
-- [ ] Redis高可用集群
-  - [ ] 哨兵Redis集群存储 Session & 秒杀订单
-  - [ ] Sharing模式Redis集群存储 其他缓存，一致性哈希算法
+- [x] Redis高可用集群
+  - [x] Redis Sentinel主从模式存储 Session & 秒杀订单
+  - [x] Redis Cluster存储其他缓存
 - [x] Nginx 反向代理 + 负载均衡 + 限流
 - [ ] 迁移至微服务架构
 - [ ] Nginx高可用
