@@ -13,7 +13,6 @@ public class RedisPoolConfig {
 
     @Bean
     public JedisPool jedisPoolFactory() {
-        // JedisPoolConfig里面已经有很多默认值
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxIdle(redisProperties.getPoolMaxIdle());
         poolConfig.setMaxTotal(redisProperties.getPoolMaxTotal());

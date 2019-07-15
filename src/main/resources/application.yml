@@ -63,6 +63,13 @@ spring:
     poolMaxTotal: 1000
     poolMaxIdle: 500
     poolMaxWait: 500
+  sentinel:
+    master: mymaster
+    nodes: 106.12.57.252:26379,106.12.57.252:26380,106.12.57.252:26381
+    timeout: 10
+    poolMaxTotal: 1000
+    poolMaxIdle: 500
+    poolMaxWait: 500
 
 mybatis:
   type-aliases-package: com.seen.seckillbackend.domain.model
