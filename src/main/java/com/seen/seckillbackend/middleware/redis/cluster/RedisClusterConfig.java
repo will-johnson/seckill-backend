@@ -1,63 +1,53 @@
 package com.seen.seckillbackend.middleware.redis.cluster;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.*;
-import redis.clients.util.Hashing;
-import redis.clients.util.Sharded;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-//@Configuration
+@Configuration
+@Slf4j
 public class RedisClusterConfig {
 
-//    @Autowired
-    private RedisClusterProperties redisClusterProperties;
+    @Autowired
+    RedisClusterProperties redisClusterProperties;
 
-//    @Bean
-    public ShardedJedisPool getShardedJedisPool() {
+    @Bean
+    public JedisCluster jedisCluster() {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxIdle(redisClusterProperties.getPoolMaxIdle());
         poolConfig.setMaxTotal(redisClusterProperties.getPoolMaxTotal());
-        poolConfig.setMaxWaitMillis(redisClusterProperties.getPoolMaxWait() * 1000);
+        poolConfig.setMaxWaitMillis(
+                redisClusterProperties.getPoolMaxWait() * 1000);
 
-        List<JedisShardInfo> jedisShardInfoList = new ArrayList<JedisShardInfo>(2);
-
-        String[] hosts = redisClusterProperties.getHosts().split(",");
-        for (String host : hosts) {
+        Set<HostAndPort> sets = new HashSet<>();
+        String[] nodes = redisClusterProperties.getNodes().split(",");
+        for (String host : nodes) {
             String[] hp = host.split(":");
-            JedisShardInfo jedisShardInfo = new JedisShardInfo(hp[0].trim(), Integer.valueOf(hp[1].trim()),redisClusterProperties.getTimeout() * 1000);
-            jedisShardInfo.setPassword(redisClusterProperties.getPassword());
-            jedisShardInfoList.add(jedisShardInfo);
+            sets.add(new HostAndPort(hp[0], Integer.valueOf(hp[1])));
         }
+        log.info("{}", sets);
 
-        return new ShardedJedisPool(poolConfig, jedisShardInfoList, Hashing.MURMUR_HASH, Sharded.DEFAULT_KEY_TAG_PATTERN);
+        return new JedisCluster(sets,
+                redisClusterProperties.getConnectionTimeout(),
+                redisClusterProperties.getSoTimeout(),
+                redisClusterProperties.getMaxAttempts(),
+                redisClusterProperties.getPassword(), poolConfig);
     }
 }
-
 
 /*
     */
 /**
-     * nodeset
-     * 连接时间超时connectionTimeout
-     * 读取数据超时soTimeout
-     * int soTimeout,
-     * int maxAttempts,
-     * String password,
-     * String clientName,
-     * GenericObjectPoolConfig poolConfig)
-     *//*
-
-    JedisCluster jedisCluster = new JedisCluster(nodes,
-            redisClusterProperties.getTimeout() * 1000,
-            10000,
-            3,
-            redisClusterProperties.getPassword(),
-            poolConfig);
-
-        return jedisCluster;*/
+ * nodeset
+ *
+ * int soTimeout,
+ * int maxAttempts,
+ * String password,
+ * String clientName,
+ * GenericObjectPoolConfig poolConfig)
+ */

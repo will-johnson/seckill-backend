@@ -70,6 +70,15 @@ spring:
     poolMaxTotal: 1000
     poolMaxIdle: 500
     poolMaxWait: 500
+  redis-cluster:
+    nodes: 106.12.57.252:7777,106.12.57.252:7778,106.12.57.252:7779,106.12.57.252:7787,106.12.57.252:7788,106.12.57.252:7789
+    password: 135790
+    connectionTimeout: 10
+    soTimeout: 10
+    maxAttempts: 3
+    poolMaxTotal: 1000
+    poolMaxIdle: 500
+    poolMaxWait: 500
 
 mybatis:
   type-aliases-package: com.seen.seckillbackend.domain.model

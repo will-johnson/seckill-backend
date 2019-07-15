@@ -8,6 +8,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.params.SetParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,10 @@ public class SentinelService {
                 return null;
             }
             String realKey = prefix.getPrefix() + key;
-            return jedis.set(realKey, realValue, "nx", "ex", time);
+            SetParams setParams = new SetParams();
+            setParams.nx();
+            setParams.ex((int) time);
+            return jedis.set(realKey, realValue, setParams);
         } finally {
             returnToPool(jedis);
         }
@@ -250,7 +254,7 @@ public class SentinelService {
                     keys.addAll(result);
                 }
                 //再处理cursor
-                cursor = ret.getStringCursor();
+                cursor = ret.getCursor();
             } while (!cursor.equals("0"));
             return keys;
         } finally {

@@ -8,6 +8,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.params.SetParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class RedisService {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            //生成真正的key
+            // 生成真正的key
             String realKey = prefix.getPrefix() + key;
             String str = jedis.get(realKey);
             T t = StringBean.stringToBean(str, clazz);
@@ -53,7 +54,7 @@ public class RedisService {
             if (str == null || str.length() <= 0) {
                 return false;
             }
-            //生成真正的key
+            // 生成真正的key
             String realKey = prefix.getPrefix() + key;
             int seconds = prefix.getExpireSeconds();
             if (seconds <= 0) {
@@ -69,6 +70,7 @@ public class RedisService {
 
     /**
      * Nx & Ex
+     * 
      * @param prefix
      * @param key
      * @param value
@@ -85,7 +87,10 @@ public class RedisService {
                 return null;
             }
             String realKey = prefix.getPrefix() + key;
-            return jedis.set(realKey, realValue, "nx", "ex", time);
+            SetParams setParams = new SetParams();
+            setParams.nx();
+            setParams.ex((int) time);
+            return jedis.set(realKey, realValue, setParams);
         } finally {
             returnToPool(jedis);
         }
@@ -156,7 +161,7 @@ public class RedisService {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            //生成真正的key
+            // 生成真正的key
             String realKey = prefix.getPrefix() + key;
             return jedis.exists(realKey);
         } finally {
@@ -171,7 +176,7 @@ public class RedisService {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            //生成真正的key
+            // 生成真正的key
             String realKey = prefix.getPrefix() + key;
             long ret = jedis.del(realKey);
             return ret > 0;
@@ -198,7 +203,7 @@ public class RedisService {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            //生成真正的key
+            // 生成真正的key
             String realKey = prefix.getPrefix() + key;
             return jedis.incr(realKey);
         } finally {
@@ -213,7 +218,7 @@ public class RedisService {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            //生成真正的key
+            // 生成真正的key
             String realKey = prefix.getPrefix() + key;
             return jedis.decr(realKey);
         } finally {
@@ -259,8 +264,8 @@ public class RedisService {
                 if (result != null && result.size() > 0) {
                     keys.addAll(result);
                 }
-                //再处理cursor
-                cursor = ret.getStringCursor();
+                // 再处理cursor
+                cursor = ret.getCursor();
             } while (!cursor.equals("0"));
             return keys;
         } finally {
@@ -293,7 +298,8 @@ public class RedisService {
         return true;
     }
 
-    public Object eval(final String script, final List<String> keys, final List<String> args) {
+    public Object eval(final String script, final List<String> keys,
+            final List<String> args) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -308,6 +314,5 @@ public class RedisService {
             jedis.close();
         }
     }
-
 
 }

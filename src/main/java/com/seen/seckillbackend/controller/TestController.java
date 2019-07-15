@@ -5,9 +5,7 @@ import com.seen.seckillbackend.middleware.redis.cluster.RedisClusterService;
 import com.seen.seckillbackend.middleware.redis.key.GoodsKeyPe;
 import com.seen.seckillbackend.middleware.redis.sentinel.SentinelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -16,6 +14,14 @@ public class TestController {
 
     @Autowired
     SentinelService sentinelService;
+
+    @Autowired
+    RedisClusterService redisClusterService;
+
+    @GetMapping("/cluster")
+    public String cluster(){
+        return redisClusterService.set("stephen", "curry");
+    }
 
     @GetMapping("/sentinel")
     public Boolean sentinelTest() {

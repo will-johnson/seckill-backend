@@ -59,6 +59,7 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
+            <version>3.0.1</version>
         </dependency>
 
         <!--序列化对象写入redis-->
