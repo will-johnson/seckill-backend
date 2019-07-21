@@ -22,5 +22,4 @@ public class GlobalExceptionHandler  {
             return Result.err(CodeMsg.UNKNOW_ERR.getCode(), e.getMessage());
         }
     }
-
 }

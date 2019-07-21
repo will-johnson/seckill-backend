@@ -66,6 +66,8 @@
 - [ ] LVS四层负载均衡
 - [ ] tomcat apr连接器，调整并发数+超时时间
 - [ ] keepalive负载均衡与高可用
+- [ ] tomcat 参数优化，连接，apr
+- [ ] Spring DeferredResult异步执行，适合执行耗时较长的任务
 
 
 ### 业务逻辑
