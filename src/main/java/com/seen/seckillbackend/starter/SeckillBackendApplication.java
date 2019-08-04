@@ -1,25 +1,24 @@
-package com.seen.seckillbackend;
+package com.seen.seckillbackend.starter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-@SpringBootApplication
-public class SeckillBackendApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(SeckillBackendApplication.class, args);
-    }
-
-}
+//@SpringBootApplication
+//public class SeckillBackendApplication {
+//
+//    public static void main(String[] args) {
+//        SpringApplication.run(SeckillBackendApplication.class, args);
+//    }
+//
+//}
 
 
 /**
  * 部署tomcat服务器
  * 修改启动类，继承 SpringBootServletInitializer 并重写 configure 方法
  */
-/*
 @SpringBootApplication
 public class SeckillBackendApplication extends SpringBootServletInitializer {
 
@@ -28,7 +27,8 @@ public class SeckillBackendApplication extends SpringBootServletInitializer {
         // 注意这里要指向原先用main方法执行的Application启动类
         return builder.sources(SeckillBackendApplication.class);
     }
+
     public static void main(String[] args) {
         SpringApplication.run(SeckillBackendApplication.class, args);
     }
-}*/
+}

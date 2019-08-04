@@ -375,3 +375,5 @@ public class GlobalExceptionHandler  {
 - 数据一致性
 
   
+## 踩坑
+Spring Boot项目部署tomcat，需要将主方法挪到一个包下面

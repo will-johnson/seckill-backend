@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
     UserArgumentResolver userArgumentResolver;
 
     @Autowired
-    AccessInterceptor accessInterceptor;
+    SeckillAccessInterceptor seckillAccessInterceptor;
 
     /**
      * 注册参数解析器
@@ -39,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration interceptor = registry.addInterceptor(accessInterceptor);
+        InterceptorRegistration interceptor = registry.addInterceptor(seckillAccessInterceptor);
 
 //        interceptor.excludePathPatterns("/which_needs_exclude");
 //

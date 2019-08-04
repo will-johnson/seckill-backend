@@ -44,7 +44,7 @@ import java.io.IOException;
  */
 @Component
 @Slf4j
-public class AccessInterceptor extends HandlerInterceptorAdapter {
+public class SeckillAccessInterceptor extends HandlerInterceptorAdapter {
 
 
     @Autowired
