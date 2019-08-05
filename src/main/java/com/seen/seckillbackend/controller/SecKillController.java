@@ -33,7 +33,6 @@ public class SecKillController implements InitializingBean {
     @Autowired
     SeckillService seckillService;
 
-
     @Autowired
     SeckillService orderService;
 
@@ -48,9 +47,9 @@ public class SecKillController implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-//        orderService.reset();
+        orderService.reset();
         goodsService.reset();
-        redisService.deleteAll();
+        // redisService.deleteAll();
         List<Goods> goodsList = goodsService.getGoodsList();
         if (null == goodsList) {
             return;
@@ -74,7 +73,7 @@ public class SecKillController implements InitializingBean {
             return Result.err(CodeMsg.USER_NEEDS_LOGIN);
         }
         seckillService.seckill(userId, goodsId, localOverMap);
-        return Result.success(0); //排队中
+        return Result.success(0); // 排队中
     }
 
 }

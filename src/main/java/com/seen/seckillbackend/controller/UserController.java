@@ -11,29 +11,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 public class UserController {
+
     @Autowired
     UserService userService;
-
 
     @PostMapping("/login")
     @ResponseBody
     public Result<String> login(HttpServletResponse response, @RequestBody User user) {
-        userService.login(response,user);
+        userService.login(user);
         return Result.success("登录成功");
     }
 
     /**
      * Reset
+     *
      * @return
      */
     @GetMapping("/login_all")
     @ResponseBody
-    public Result<Integer> loginAll(HttpServletResponse response) {
-        userService.loginAll(response);
+    public Result<Integer> loginAll() {
+        userService.loginAll();
         return Result.success(0);
+    }
+
+    @GetMapping("/users")
+    @ResponseBody
+    public List<User> getAllUser() {
+        return userService.getAllUser();
     }
 
 }

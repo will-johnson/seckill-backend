@@ -90,6 +90,10 @@ mybatis:
 
 server:
   port: 8765
+  tomcat:
+    max-connections: 1000
+    max-threads: 1000
+    max-http-header-size: 102400
 
 redisson:
   address: redis://106.12.57.252:6379

@@ -37,17 +37,19 @@ public class UserService {
     @Autowired
     SeckillService orderService;
 
-    public String login(HttpServletResponse response, User user) {
+    public String login(User user) {
         if (null == user) {
             throw new GlobalException(CodeMsg.USER_NULL);
         }
         //TODO 验证密码
 
         //生成token, token = (userid +"," + 加密信息）
-        String tokenSrc = user.getUserId()  + "," + TOKEN_SALT;
-        String token = AesCryption.encrypt(tokenSrc);
+        String tokenSrc = user.getUserId()  + "_" + TOKEN_SALT;
+        // String token = AesCryption.encrypt(tokenSrc);
 
-        this.addCookie(response, token);
+        String token = tokenSrc;
+        redisService.set(UserTokenKeyPe.userTokenKeyPe, token, token);
+        // this.addCookie(response, token);
         return token;
     }
 
@@ -61,7 +63,8 @@ public class UserService {
         //延长有效期
         if (exists) {
             addCookie(response, token);
-            String[] split = AesCryption.decrypt(token).split(",");
+            String[] split = token.split("_");
+            // String[] split = AesCryption.decrypt(token).split(",");
             if (split[1].equals(TOKEN_SALT)) {
                 return Long.valueOf(split[0]);
             }
@@ -71,9 +74,9 @@ public class UserService {
     }
 
 
-    public void loginAll(HttpServletResponse response) {
+    public void loginAll() {
         //reset
-        redisService.deleteAll();
+        // redisService.deleteAll();
         goodsService.reset();
         orderService.reset();
 
@@ -89,13 +92,12 @@ public class UserService {
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter out = new BufferedWriter(fw);
             for (User user : allUser) {
-                String token = this.login(response, user);
+                String token = this.login(user);
                 String line = user.getUserId() + "," + token + "\n";
                 out.write(line);
             }
             out.close();
         } catch (IOException e) {
-
         }
     }
 
@@ -105,10 +107,14 @@ public class UserService {
      * 标示token对应哪个用户
      */
     private void addCookie(HttpServletResponse response, String token) {
-        redisService.set(UserTokenKeyPe.userTokenKeyPe, token, token);
+
         Cookie cookie = new Cookie(COOKIE_TOKEN_NAME, token);
         cookie.setMaxAge(UserTokenKeyPe.userTokenKeyPe.getExpireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    public List<User> getAllUser() {
+        return userDao.getAllUser();
     }
 }

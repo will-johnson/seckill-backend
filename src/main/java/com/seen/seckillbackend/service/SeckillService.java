@@ -111,7 +111,7 @@ public class SeckillService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public SeckillOrder reduceInventory(Long userId, Goods goods) {
         // 乐观锁更新
-        int version = goodsDao.getVersionById(goods.getId());
+        Integer version = goodsDao.getVersionById(goods.getId());
         int effectNum = goodsDao.optimisticReduceStockById(goods.getId(),1, version);
         if (effectNum > 0) {
             log.info("减库存成功");
@@ -122,8 +122,8 @@ public class SeckillService {
             // 返还redis库存
             redisService.incr(GoodsKeyPe.goodsKeyPe, goods.getId()+"");
             // 内存标记还原
-
-            throw new GlobalException(CodeMsg.SECKILL_OVER);
+            // throw new GlobalException(CodeMsg.SECKILL_OVER);
+            return null;
         }
     }
 

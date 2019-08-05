@@ -37,7 +37,7 @@ public interface GoodsDao {
     void updateStockById(Long goodsId, Integer quantity);
 
     @Select("select version from goods where id = #{id}")
-    int getVersionById(Long id);
+    Integer getVersionById(Long id);
 
 
 }
