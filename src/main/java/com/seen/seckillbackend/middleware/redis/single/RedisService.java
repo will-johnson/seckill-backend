@@ -12,6 +12,7 @@ import redis.clients.jedis.params.SetParams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RedisService {
@@ -140,19 +141,6 @@ public class RedisService {
         }
     }
 
-    public <T> Long setnx(String key, T value) {
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
-            String str = StringBean.beanToString(value);
-            if (str == null || str.length() <= 0) {
-                return null;
-            }
-            return jedis.setnx(key, str);
-        } finally {
-            returnToPool(jedis);
-        }
-    }
 
     /**
      * 判断key是否存在
@@ -185,16 +173,6 @@ public class RedisService {
         }
     }
 
-    public boolean delete(String key) {
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
-            long ret = jedis.del(key);
-            return ret > 0;
-        } finally {
-            returnToPool(jedis);
-        }
-    }
 
     /**
      * 增加值
@@ -221,6 +199,21 @@ public class RedisService {
             // 生成真正的key
             String realKey = prefix.getPrefix() + key;
             return jedis.decr(realKey);
+        } finally {
+            returnToPool(jedis);
+        }
+    }
+
+    public void delPrefix(KeyPe keyPe) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            // 生成真正的key
+            String realKey = keyPe.getPrefix()+"*";
+            Set<String> keys = jedis.keys(realKey);
+            for (String key : keys) {
+                jedis.del(key);
+            }
         } finally {
             returnToPool(jedis);
         }

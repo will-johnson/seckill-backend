@@ -4,7 +4,9 @@ import com.seen.seckillbackend.common.access.AccessLimit;
 import com.seen.seckillbackend.common.response.CodeMsg;
 import com.seen.seckillbackend.common.response.Result;
 import com.seen.seckillbackend.domain.Goods;
+import com.seen.seckillbackend.middleware.redis.key.AccessKeyPe;
 import com.seen.seckillbackend.middleware.redis.key.GoodsKeyPe;
+import com.seen.seckillbackend.middleware.redis.key.OrderKeyPe;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
 import com.seen.seckillbackend.service.GoodsService;
 import com.seen.seckillbackend.service.SeckillService;
@@ -49,7 +51,9 @@ public class SecKillController implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         orderService.reset();
         goodsService.reset();
-        // redisService.deleteAll();
+        redisService.delPrefix(AccessKeyPe.accessKeyPe(1));
+        redisService.delPrefix(GoodsKeyPe.goodsKeyPe);
+        redisService.delPrefix(OrderKeyPe.orderKeyPe);
         List<Goods> goodsList = goodsService.getGoodsList();
         if (null == goodsList) {
             return;
@@ -73,7 +77,8 @@ public class SecKillController implements InitializingBean {
             return Result.err(CodeMsg.USER_NEEDS_LOGIN);
         }
         seckillService.seckill(userId, goodsId, localOverMap);
-        return Result.success(0); // 排队中
+        // 排队中
+        return Result.success(0);
     }
 
 }
