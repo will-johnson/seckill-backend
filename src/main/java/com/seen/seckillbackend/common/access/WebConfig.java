@@ -44,7 +44,5 @@ public class WebConfig implements WebMvcConfigurer {
 //        interceptor.excludePathPatterns("/which_needs_exclude");
 //
 //        interceptor.addPathPatterns("/which_needs_include");
-
-
     }
 }

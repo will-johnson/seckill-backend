@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MQReceiver {
     @Autowired
-    SeckillService orderService;
+    SeckillService seckillService;
 
     @RabbitListener(queues = MQConfig.QUEUE_NAME)
     public void receive(String message) {
-        orderService.postSeckill(message);
+        seckillService.postSeckill(message);
     }
 }

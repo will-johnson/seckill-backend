@@ -41,8 +41,6 @@ public class SecKillController implements InitializingBean {
     @Autowired
     UserService userService;
 
-    // 内存标记Map<goodsId, isOver>, true is over
-    private HashMap<Long, Boolean> localOverMap = new HashMap<Long, Boolean>();
 
     /**
      * 系统初始化, 秒杀商品库存加载进redis
@@ -61,7 +59,7 @@ public class SecKillController implements InitializingBean {
         for (Goods goods : goodsList) {
             long stock = goodsService.getGoodsStockById(goods.getId());
             redisService.set(GoodsKeyPe.goodsKeyPe, "" + goods.getId(), stock);
-            localOverMap.put(goods.getId(), false);
+            seckillService.reSetLocalMap(goods.getId());
         }
     }
 
@@ -76,8 +74,7 @@ public class SecKillController implements InitializingBean {
             log.info("用户未登录");
             return Result.err(CodeMsg.USER_NEEDS_LOGIN);
         }
-        seckillService.seckill(userId, goodsId, localOverMap);
-        // 排队中
+        seckillService.seckill(userId, goodsId);
         return Result.success(0);
     }
 

@@ -34,6 +34,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
      * 真正用于处理参数分解的方法，返回的Object就是controller方法上的形参对象。
      * 在cookie或requestParam中获取到token，通过token去redis中获取详细的用户信息，再将用户信息放到页面进行展示
      */
+    @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         return UserContext.getUserId();

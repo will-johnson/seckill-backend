@@ -46,16 +46,16 @@ public class SeckillService {
     @Autowired
     MQSender sender;
 
+    // 内存标记Map<goodsId, isOver>, true is over
+    private HashMap<Long, Boolean> localOverMap = new HashMap<>();
+
     /**
      * 1. 内存标记，减少redis访问
      * 2. 先判断是否已经秒杀过了
      * 3. Redis预减库存
      * 4. 入队
-     * @param userId
-     * @param goodsId
-     * @param localOverMap
      */
-    public void seckill(Long userId, Long goodsId, Map<Long,Boolean> localOverMap) {
+    public void seckill(Long userId, Long goodsId) {
 
         if (localOverMap.get(goodsId)) {
             throw new GlobalException(CodeMsg.SECKILL_OVER);
@@ -158,6 +158,10 @@ public class SeckillService {
 
     public void reset() {
         seckillOrderDao.delAll();
+    }
+
+    public void reSetLocalMap(Long id) {
+        localOverMap.put(id, false);
     }
 
 }
