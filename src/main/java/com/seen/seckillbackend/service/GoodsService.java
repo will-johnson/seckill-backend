@@ -31,7 +31,7 @@ public class GoodsService {
         return goodsDao.getGoodsStockById(id);
     }
 
-    public void reset() {
+    public void resetDatabaseGoods() {
         goodsDao.reset();
     }
 }

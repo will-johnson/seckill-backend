@@ -5,7 +5,6 @@ import com.seen.seckillbackend.domain.User;
 import com.seen.seckillbackend.common.response.GlobalException;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
 import com.seen.seckillbackend.middleware.redis.key.UserTokenKeyPe;
-import com.seen.seckillbackend.common.util.AesCryption;
 import com.seen.seckillbackend.common.response.CodeMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,10 +74,10 @@ public class UserService {
 
 
     public void loginAll() {
-        //reset
+        //resetDatabaseOrder
         // redisService.deleteAll();
-        goodsService.reset();
-        orderService.reset();
+        goodsService.resetDatabaseGoods();
+        orderService.resetDatabaseOrder();
 
         List<User> allUser = userDao.getAllUser();
         File file = new File("src/main/resources/static/token.txt");

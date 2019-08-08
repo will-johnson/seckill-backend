@@ -1,0 +1,8 @@
+redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+	at redis.clients.jedis.util.Pool.getResource(Pool.java:59) ~[jedis-3.0.1.jar:na]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:234) ~[jedis-3.0.1.jar:na]
+	at com.seen.seckillbackend.middleware.redis.single.RedisService.setNxEx(RedisService.java:85) ~[classes/:na]
+	at com.seen.seckillbackend.task.CloseOrderTask.redisLock(CloseOrderTask.java:66) ~[classes/:na]
+
+应该关闭定时关单功能
+redis数据库连接池太少

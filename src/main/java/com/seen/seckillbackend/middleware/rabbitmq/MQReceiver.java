@@ -14,6 +14,7 @@ public class MQReceiver {
 
     @RabbitListener(queues = MQConfig.QUEUE_NAME)
     public void receive(String message) {
+        log.info("收到消息：{}", message);
         seckillService.postSeckill(message);
     }
 }

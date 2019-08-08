@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -47,11 +46,12 @@ public class SecKillController implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        orderService.reset();
-        goodsService.reset();
+        orderService.resetDatabaseOrder();
+        goodsService.resetDatabaseGoods();
         redisService.delPrefix(AccessKeyPe.accessKeyPe(1));
         redisService.delPrefix(GoodsKeyPe.goodsKeyPe);
         redisService.delPrefix(OrderKeyPe.orderKeyPe);
+
         List<Goods> goodsList = goodsService.getGoodsList();
         if (null == goodsList) {
             return;
@@ -59,6 +59,7 @@ public class SecKillController implements InitializingBean {
         for (Goods goods : goodsList) {
             long stock = goodsService.getGoodsStockById(goods.getId());
             redisService.set(GoodsKeyPe.goodsKeyPe, "" + goods.getId(), stock);
+            log.info("redis预缓存 GoodsId:{}, Stock:{}", goods.getId(), stock);
             seckillService.reSetLocalMap(goods.getId());
         }
     }
@@ -66,7 +67,7 @@ public class SecKillController implements InitializingBean {
     /**
      * 高并发访问接口
      */
-    @AccessLimit(seconds = 5, maxCount = 5)
+//    @AccessLimit(seconds = 10, maxCount = 100)
     @GetMapping("/seckill/{goodsId}")
     @ResponseBody
     public Result<Integer> seckill(Long userId, @PathVariable Long goodsId) {
@@ -74,8 +75,7 @@ public class SecKillController implements InitializingBean {
             log.info("用户未登录");
             return Result.err(CodeMsg.USER_NEEDS_LOGIN);
         }
-        seckillService.seckill(userId, goodsId);
+        seckillService.preSeckill(userId, goodsId);
         return Result.success(0);
     }
-
 }
