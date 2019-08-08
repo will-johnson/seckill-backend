@@ -6,3 +6,7 @@ redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resourc
 
 应该关闭定时关单功能
 redis数据库连接池太少
+
+
+
+局限性，云服务器内存太小了
