@@ -1,0 +1,8 @@
+tomcat:
+默认线程池：
+    maxThreads="150" minSpareThreads="4"
+配置：
+minSpareThreads = 300, maxThread = 500;
+
+
+数据库连接池：500

@@ -1,6 +1,5 @@
 package com.seen.seckillbackend.controller;
 
-import com.seen.seckillbackend.common.access.AccessLimit;
 import com.seen.seckillbackend.common.response.CodeMsg;
 import com.seen.seckillbackend.common.response.Result;
 import com.seen.seckillbackend.domain.Goods;
@@ -45,7 +44,7 @@ public class SecKillController implements InitializingBean {
      * 系统初始化, 秒杀商品库存加载进redis
      */
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         orderService.resetDatabaseOrder();
         goodsService.resetDatabaseGoods();
         redisService.delPrefix(AccessKeyPe.accessKeyPe(1));

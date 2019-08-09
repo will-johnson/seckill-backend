@@ -10,8 +10,6 @@ import com.seen.seckillbackend.middleware.redis.key.KeyPe;
 import com.seen.seckillbackend.middleware.redis.single.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * scheduling单独线程来执行定时调度任务
@@ -53,71 +50,50 @@ public class CloseOrderTask {
     @Autowired
     RedisService redisService;
 
-    @Autowired
-    RedissonClient redissonClient;
-
     /**
      * 基于redis setnxex加锁，lua脚本原子性解锁
+     * 
      * @return
      */
     @Scheduled(cron = "0 */1 * * * ?") // 每隔1分钟关闭超时订单
     public Result<CodeMsg> redisLock() {
         int expireSeconds = DisLockKeyPe.disLockKeyPe.getExpireSeconds();
-        String s = redisService.setNxEx(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK, Thread.currentThread().getId()+"", expireSeconds);
+        String s = redisService.setNxEx(DisLockKeyPe.disLockKeyPe,
+                CLOSE_ORDER_LOCK, Thread.currentThread().getId() + "",
+                expireSeconds);
         if (LOCK_SUCCESS.equals(s)) {
             // 加锁成功
-            log.info("线程{}: 获取分布式锁{} 成功", Thread.currentThread(), CLOSE_ORDER_LOCK);
+            log.info("线程{}: 获取分布式锁{} 成功", Thread.currentThread(),
+                    CLOSE_ORDER_LOCK);
             Result<CodeMsg> codeMsgResult = closeOrder();
-            if (redisReleaseLock(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK, Thread.currentThread().getId()+"")) {
-                log.info("线程{}: 释放分布式锁{} 成功", Thread.currentThread(), CLOSE_ORDER_LOCK);
-            }else {
-                log.info("线程{}: 释放分布式锁{} 失败", Thread.currentThread(), CLOSE_ORDER_LOCK);
+            if (redisReleaseLock(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK,
+                    Thread.currentThread().getId() + "")) {
+                log.info("线程{}: 释放分布式锁{} 成功", Thread.currentThread(),
+                        CLOSE_ORDER_LOCK);
+            } else {
+                log.info("线程{}: 释放分布式锁{} 失败", Thread.currentThread(),
+                        CLOSE_ORDER_LOCK);
             }
             return codeMsgResult;
         } else {
-            log.info("线程{}: 获取分布式锁{} 失败", Thread.currentThread(), CLOSE_ORDER_LOCK);
+            log.info("线程{}: 获取分布式锁{} 失败", Thread.currentThread(),
+                    CLOSE_ORDER_LOCK);
         }
         return null;
     }
 
-    public boolean redisReleaseLock(KeyPe keyPe, String lockKey, String threadId) {
+    public boolean redisReleaseLock(KeyPe keyPe, String lockKey,
+            String threadId) {
         String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
         String realKey = keyPe.getPrefix() + lockKey;
-        Object result = redisService.eval(script, Collections.singletonList(realKey), Collections.singletonList(threadId));
+        Object result = redisService.eval(script,
+                Collections.singletonList(realKey),
+                Collections.singletonList(threadId));
         if (RELEASE_SUCCESS.equals(result)) {
             return true;
         }
         return false;
     }
-
-
-    /**
-     * 利用Redisson分布式锁实现定时关单
-     */
-    public Result<CodeMsg> redissonLock() {
-        // TODO prefix
-        RLock lock = redissonClient.getLock(CLOSE_ORDER_LOCK);
-
-        boolean getLock = false;
-        try {
-            getLock = lock.tryLock(2, 5, TimeUnit.SECONDS);
-            if (getLock) {
-                return closeOrder();
-            } else {
-                log.warn("ThreadName:{} 获取到分布式锁:{} 失败", Thread.currentThread().getName());
-            }
-        } catch (InterruptedException e) {
-            log.error("获取分布式锁异常: ", e);
-            e.printStackTrace();
-        } finally {
-            if (getLock) {
-                lock.unlock();
-                log.info("Redisson释放分布式锁");
-            }
-        }
-        return null;
-    }
-
 
     /**
      * 注意：保证事务性
@@ -127,7 +103,8 @@ public class CloseOrderTask {
     private Result<CodeMsg> closeOrder() {
         // expire防止死锁？？？
         Date date = DateUtils.addMinutes(new Date(), -CLOSE_INTERVAL_MINIUTES);
-        List<SeckillOrder> unpaidOrders = seckillOrderDao.findUnpaidExpiredOrder(date);
+        List<SeckillOrder> unpaidOrders = seckillOrderDao
+                .findUnpaidExpiredOrder(date);
         log.info("准备关闭超时订单 : " + unpaidOrders.size() + "个");
         for (SeckillOrder unpaidOrder : unpaidOrders) {
             closeAndReturn(unpaidOrder);
@@ -139,9 +116,9 @@ public class CloseOrderTask {
     @Transactional(rollbackFor = Exception.class)
     public void closeAndReturn(SeckillOrder unpaidOrder) {
         seckillOrderDao.updateClose(unpaidOrder.getOrderId(), new Date());
-        goodsDao.updateStockById(unpaidOrder.getGoodsId(), unpaidOrder.getQuantity());
+        goodsDao.updateStockById(unpaidOrder.getGoodsId(),
+                unpaidOrder.getQuantity());
     }
-
 
     /**
      * setnx() & expire 过于复杂
@@ -151,7 +128,8 @@ public class CloseOrderTask {
      */
     public Result<CodeMsg> distributedScheduledCloseOrder() {
         int expireSeconds = DisLockKeyPe.disLockKeyPe.getExpireSeconds();
-        Long l = redisService.setnx(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK, System.currentTimeMillis() + expireSeconds);
+        Long l = redisService.setnx(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK,
+                System.currentTimeMillis() + expireSeconds);
         if (l != null && !l.equals(0L)) {
 
             redisService.expire("THE_KEY", expireSeconds);
@@ -160,19 +138,24 @@ public class CloseOrderTask {
 
             return codeMsgResult;
         } else {
-            //未获取到锁，继续判断，判断时间戳，看是否可以重置并获取到锁
-            Long time = redisService.get(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK, Long.class);
+            // 未获取到锁，继续判断，判断时间戳，看是否可以重置并获取到锁
+            Long time = redisService.get(DisLockKeyPe.disLockKeyPe,
+                    CLOSE_ORDER_LOCK, Long.class);
             if (time != null && time < System.currentTimeMillis()) {
                 // 双重校验，如果此时另一个线程也做如上判断，则都拿到了锁
                 // getSet, 老值等于新值，说明是该线程设置的，可以拿到锁
-                Long oldTime = redisService.getSet(DisLockKeyPe.disLockKeyPe, CLOSE_ORDER_LOCK, System.currentTimeMillis() + expireSeconds, Long.class);
+                Long oldTime = redisService.getSet(DisLockKeyPe.disLockKeyPe,
+                        CLOSE_ORDER_LOCK,
+                        System.currentTimeMillis() + expireSeconds, Long.class);
                 if (oldTime == null || time.equals(oldTime)) {
                     return closeOrder();
                 } else {
-                    log.warn("线程{}: 获取分布式锁{} 失败", Thread.currentThread(), CLOSE_ORDER_LOCK);
+                    log.warn("线程{}: 获取分布式锁{} 失败", Thread.currentThread(),
+                            CLOSE_ORDER_LOCK);
                 }
             } else {
-                log.warn("线程{}: 获取分布式锁{} 失败", Thread.currentThread(), CLOSE_ORDER_LOCK);
+                log.warn("线程{}: 获取分布式锁{} 失败", Thread.currentThread(),
+                        CLOSE_ORDER_LOCK);
             }
             return null;
         }

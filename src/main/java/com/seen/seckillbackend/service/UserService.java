@@ -74,10 +74,7 @@ public class UserService {
 
 
     public void loginAll() {
-        //resetDatabaseOrder
         // redisService.deleteAll();
-        goodsService.resetDatabaseGoods();
-        orderService.resetDatabaseOrder();
 
         List<User> allUser = userDao.getAllUser();
         File file = new File("src/main/resources/static/token.txt");
