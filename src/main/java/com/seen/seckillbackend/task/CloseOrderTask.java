@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
-@EnableScheduling
+// @EnableScheduling
 public class CloseOrderTask {
 
     // 多久关单
@@ -55,7 +55,7 @@ public class CloseOrderTask {
      * 
      * @return
      */
-    @Scheduled(cron = "0 */1 * * * ?") // 每隔1分钟关闭超时订单
+    // @Scheduled(cron = "0 */1 * * * ?") // 每隔1分钟关闭超时订单
     public Result<CodeMsg> redisLock() {
         int expireSeconds = DisLockKeyPe.disLockKeyPe.getExpireSeconds();
         String s = redisService.setNxEx(DisLockKeyPe.disLockKeyPe,

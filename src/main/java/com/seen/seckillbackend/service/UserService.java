@@ -74,7 +74,6 @@ public class UserService {
 
 
     public void loginAll() {
-        // redisService.deleteAll();
 
         List<User> allUser = userDao.getAllUser();
         File file = new File("src/main/resources/static/token.txt");

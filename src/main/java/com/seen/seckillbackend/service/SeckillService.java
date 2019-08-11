@@ -56,6 +56,7 @@ public class SeckillService {
     public void preSeckill(Long userId, Long goodsId) {
 
         if (localOverMap.get(goodsId)) {
+            log.info("用户：{} 秒杀已结束", userId);
             throw new GlobalException(CodeMsg.SECKILL_OVER);
         }
 

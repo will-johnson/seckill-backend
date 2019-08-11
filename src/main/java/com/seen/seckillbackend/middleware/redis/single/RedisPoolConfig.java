@@ -18,11 +18,13 @@ public class RedisPoolConfig {
         poolConfig.setMaxTotal(redisProperties.getPoolMaxTotal());
         poolConfig.setMaxWaitMillis(redisProperties.getPoolMaxWait() * 1000);
 
-        poolConfig.setBlockWhenExhausted(true); //默认值true, 连接耗尽时，是否阻塞，true阻塞，false，抛异常
+        poolConfig.setBlockWhenExhausted(true); // 默认值true,
+                                                // 连接耗尽时，是否阻塞，true阻塞，false，抛异常
 
-        JedisPool jedisPool = new JedisPool(
-                poolConfig, redisProperties.getHost(),
-                redisProperties.getPort(), redisProperties.getTimeout() * 1000);
+        JedisPool jedisPool = new JedisPool(poolConfig,
+                redisProperties.getHost(), redisProperties.getPort(),
+                redisProperties.getTimeout() * 1000,
+                redisProperties.getPassword(), 0);
         return jedisPool;
     }
 }

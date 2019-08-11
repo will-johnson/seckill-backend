@@ -1,6 +1,6 @@
 package com.seen.seckillbackend.common.util;
 
-import org.apache.tomcat.util.codec.binary.Base64;
+// import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
@@ -28,31 +28,31 @@ public class AesCryption {
         }
     }
 
-    public static String encrypt(String src) {
-
-        String code = null;
-        try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            byte[] temp = cipher.doFinal(src.getBytes());
-            code = Base64.encodeBase64String(temp);
-        } catch (BadPaddingException | IllegalBlockSizeException | InvalidKeyException e) {
-            e.printStackTrace();
-        }
-        return code;
-    }
-
-    public static String decrypt(String code) {
-        String src = null;
-        try {
-            // 解密
-            cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] bytes = Base64.decodeBase64(code);
-            byte[] bytes1 = cipher.doFinal(bytes);
-            src = new String(bytes1);
-        } catch (BadPaddingException | IllegalBlockSizeException | InvalidKeyException e) {
-            e.printStackTrace();
-        }
-        return src;
-    }
+    // public static String encrypt(String src) {
+    //
+    //     String code = null;
+    //     try {
+    //         cipher.init(Cipher.ENCRYPT_MODE, key);
+    //         byte[] temp = cipher.doFinal(src.getBytes());
+    //         code = Base64.encodeBase64String(temp);
+    //     } catch (BadPaddingException | IllegalBlockSizeException | InvalidKeyException e) {
+    //         e.printStackTrace();
+    //     }
+    //     return code;
+    // }
+    //
+    // public static String decrypt(String code) {
+    //     String src = null;
+    //     try {
+    //         // 解密
+    //         cipher.init(Cipher.DECRYPT_MODE, key);
+    //         byte[] bytes = Base64.decodeBase64(code);
+    //         byte[] bytes1 = cipher.doFinal(bytes);
+    //         src = new String(bytes1);
+    //     } catch (BadPaddingException | IllegalBlockSizeException | InvalidKeyException e) {
+    //         e.printStackTrace();
+    //     }
+    //     return src;
+    // }
 
 }
