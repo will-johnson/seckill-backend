@@ -23,8 +23,7 @@ public class RedisPoolConfig {
 
         JedisPool jedisPool = new JedisPool(poolConfig,
                 redisProperties.getHost(), redisProperties.getPort(),
-                redisProperties.getTimeout() * 1000,
-                redisProperties.getPassword(), 0);
+                redisProperties.getTimeout() * 1000);
         return jedisPool;
     }
 }

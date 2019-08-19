@@ -49,9 +49,8 @@ spring:
           # Maximum duration between attempts
           max-interval: 10000
   redis:
-    host: seen.com
+    host: 172.20.10.3
     port: 6379
-    password: 135790
     timeout: 100
     poolMaxTotal: 100
     poolMaxIdle: 100
