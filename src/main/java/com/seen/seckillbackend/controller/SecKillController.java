@@ -74,6 +74,7 @@ public class SecKillController implements InitializingBean {
             log.info("用户未登录");
             return Result.err(CodeMsg.USER_NEEDS_LOGIN);
         }
+        log.info("用户：{} 开始秒杀", userId);
         seckillService.preSeckill(userId, goodsId);
         return Result.success(0);
     }

@@ -15,7 +15,7 @@ public class MQSender {
 
     public void send(Object obj) {
         String message = StringBean.beanToString(obj);
-        log.info("send message: " + message);
         amqpTemplate.convertAndSend(MQConfig.QUEUE_NAME, message);
+        log.info("send message: " + message);
     }
 }
