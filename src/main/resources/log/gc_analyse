@@ -1,0 +1,6 @@
+特点：大多是新对象，生命周期很短
+
+cms 100 default qps:108
+Throughput: 99.907%
+Avg Pause GC Time 	7.20 ms
+Max Pause GC Time 	30.0 ms

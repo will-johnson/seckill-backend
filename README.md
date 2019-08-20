@@ -13,6 +13,8 @@ Sentinel模式：三个哨兵+一主二从
 root     18628 17960  0 Jul14 ?        01:31:42 redis-sentinel *:26379 [sentinel]
 root     18635 17960  0 Jul14 ?        01:31:37 redis-sentinel *:26380 [sentinel]
 root     18647 17960  0 Jul14 ?        01:31:33 redis-sentinel *:26381 [sentinel]
+
+# docker容器
 88da4e131fc1        redis-sentinel-temp   "docker-entrypoint.s…"   13 days ago         Up 13 days          0.0.0.0:26379-26381->26379-26381/tcp, 0.0.0.0:6666->6379/tcp   redis-master-new
 a32d2b59a8b7        redis                 "docker-entrypoint.s…"   2 weeks ago         Up 13 days          0.0.0.0:6668->6379/tcp                                         redis-slave2
 70d9f6fe6400        redis                 "docker-entrypoint.s…"   2 weeks ago         Up 13 days          0.0.0.0:6667->6379/tcp                                         redis-slave1
@@ -184,7 +186,7 @@ token = 加密（userId + 加密信息）
 
 ### 3. 分布式锁
 
-在多线程中加锁是`线程`对`进程资源`的分配，而到分布式锁这里是`单个服务器`（`进程`）对`集群`中**共有资源**的分配
+在多线程中加锁是`线程`对`进程资源`的分配，分布式锁是控制`单个服务器`（`进程`）对`集群`中**共有资源**的分配
 
 应用: 应用程序使用Scheduled定时关闭超时订单，Tomcat集群中会发生争抢执行的情况，需要使用分布式锁来协调。
 
@@ -197,67 +199,9 @@ https://redisson.org
 
 https://github.com/redisson/redisson/wiki
 
-- Redisson是架设在Redis基础上的一个java驻内存数据网格。
-- Redisson在基于NIO的Netty框架上，充分的利用了Redis键值数据库提供的一系列优势。
-- 在java使用工具包中常用接口的基础上，为使用者提供了一系列具有分布式特性的常用工具类。
-- 使得原本作为协调单机多线程并发程序的工具包获得了协调分布式多机多线程并发系统的能力，大大降低了设计和研发大规模分布式系统的难度。
-- 同时结合各富特色的分布式服务，更进一步简化了分布式环境中程序相互之间的协作。
-
-我们使用Redisson的可重入锁，作为分布式锁
-
-基于Redis的Redisson分布式可重入锁[`RLock`](http://static.javadoc.io/org.redisson/redisson/3.4.3/org/redisson/api/RLock.html) Java对象实现了`java.util.concurrent.locks.Lock`接口。
-
-```
-RLock lock = redisson.getLock("anyLock");
-lock.lock();
-```
-
-大家都知道，如果负责储存这个分布式锁的Redis节点宕机以后，而且这个锁正好处于锁住的状态时，这个锁会出现锁死的状态。为了避免这种情况的发生，Redisson内部提供了一个监控锁的看门狗，它的作用是在Redisson实例被关闭前，不断的延长锁的有效期。
-
-另外Redisson还通过加锁的方法提供了`leaseTime`的参数来指定加锁的时间。超过这个时间后锁便自动解开了。
-
-
-
-基于Redis的Redisson红锁`RedissonRedLock`对象实现了[Redlock](http://redis.cn/topics/distlock.html)介绍的加锁算法。该对象也可以用来将多个`RLock`对象关联为一个红锁，每个`RLock`对象实例可以来自于不同的Redisson实例。
-
-```
-RLock lock1 = redissonInstance1.getLock("lock1");
-RLock lock2 = redissonInstance2.getLock("lock2");
-RLock lock3 = redissonInstance3.getLock("lock3");
-
-RedissonRedLock lock = new RedissonRedLock(lock1, lock2, lock3);
-// 同时加锁：lock1 lock2 lock3
-// 红锁在大部分节点上加锁成功就算成功。
-lock.lock();
-...
-lock.unlock();
-```
 
 #### Redis分布式锁总结
-
-PlanA:
-
-- 使用Set(key, value) ，expire()，del()命令
-- 缺陷：set 和 expire之间出错，结果可能锁一直生效，所有人都无法获取到锁
-- 这个大可不必要，因为实现复杂，而且redis提供了setnx|ex命令
-
-PlanB:
-
-- 使用Set(key, value, nx, ex, expireTime)原子指令 和 del()指令
-- 缺陷：假设A设置expire  = 2, 但是业务执行了3s；2s时B设置锁；A在3s时释放锁，就释放了B设置的锁
-- 这里就会发生集群中多个实例同时执行这段代码，但是在定时关单的场景下，再执行一遍也没有关系；解决办法可以是开启一个守护线程，不断为当前线程的锁续命，或者是预估好执行时间和过期时间
-
-PlanC:
-
-- 给上一个Value中添加身份标示，释放锁时，看是否是自己加的
-- 缺陷：get() del()不是原子方法，在执行间隙可能夹杂其他操作，还有可能释放掉别人的锁
-
-PlanD:
-
-- 使用Lua脚本使得释放锁Get & Del成为原子性
-- 缺陷：单机环境下可以，在集群下主从复制异步性可能导致新的问题
-
-参考[别人的分布式锁](https://wudashan.cn/2017/10/23/Redis-Distributed-Lock-Implement/)
+[参见我的个人博客中对Redis分布式锁的分析](http://will-johnson.gitee.io/blog/2019/08/11/Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/)
 
 ### 4. 限流
 
@@ -301,33 +245,51 @@ update goods set stock = stock - #{buy}, version = #{version} +1 where id = #{id
 
 #### C. Redis watch乐观锁[待实现]
 
-### 6.全局异常处理
+## 性能优化
 
-SpringMVC 全局异常的优点：如果有很多异常没有被包装，那么项目的很多包名甚至sql语句、数据库的ip等都会泄露出去。
+电脑配置：4核8G
 
-加上全局异常处理器后，所有的异常都会被封装后抛出
+### 1. Tomcat线程池调整
 
-```java
-/**
- * @ControllerAdvice 注解，可以用于定义@ExceptionHandler、@InitBinder、@ModelAttribute，并应用到所有@RequestMapping中。
- */
-@ControllerAdvice
-@Slf4j
-public class GlobalExceptionHandler  {
+```
+粗略估算得：
+cpu耗时：11ms
+IO耗时：65ms
 
-    @ExceptionHandler(value = Exception.class)
-    @ResponseBody
-    public Result handle(Exception e) {
-        if (e instanceof GlobalException) {
-            GlobalException exception = (GlobalException)e;
-            return Result.err(exception.getCm());
-        }else{
-            return Result.err(CodeMsg.UNKNOW_ERR.getCode(), e.getMessage());
-        }
-    }
-}
+最优线程池大小 =  ( (线程io时间 + 线程cpu) / 线程cpu time) * cpu核数
+(60+11)/11 * 4 = 27.6个
+
+压测得最优线程池大小23个
 ```
 
+使用apr连接器：qps性能提升约4%
+
+
+
+### 2. GC调优
+
+秒杀场景特点：大多是新对象，生命周期很短
+
+5000线程+30次循环
+
+
+
+我先后用了CMS+ParNew, G1两种垃圾回收器进行压测
+
+- CMS+ParNew
+    - 默认参数
+        - qps: 700
+    - 设置初始堆大小700MB，新生代200M
+        - qps: 870
+- G1
+    - 默认参数
+        - qps: 1060
+    - 设置初始堆大小700M
+        - qps: 1200
+
+对比之下，CMS在秒杀过程中有明显的停顿
+
+关于G1的优势，详见[G1](http://will-johnson.gitee.io/blog/2019/07/02/G1/)
 
 
 ## 一些细节思考
@@ -354,7 +316,7 @@ public class GlobalExceptionHandler  {
 
 分布式会带来更强的性能，高可用
 
-当我们的服务采用分布式时，就会产生许多问题，比如：
+但是也会产生许多问题，比如：
 
 - 分布式事务
 
@@ -373,7 +335,3 @@ public class GlobalExceptionHandler  {
 - 分布式任务调度
 
 - 数据一致性
-
-  
-## 踩坑
-Spring Boot项目部署tomcat，需要将主方法挪到一个包下面
